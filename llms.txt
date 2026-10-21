@@ -1,0 +1,30 @@
+# CrewFinding
+
+> Crew operations app for service businesses running two to five crews: live GPS crew tracking, time tracking, e-signed documents (contracts, BOLs, waivers), per-job cost tracking, per-worker timesheets from tracked hours (CrewFinding does not run payroll), and in-app payment collection. Priced by truck, from $40 a month: $40 for up to 2 trucks, $60 for 3 trucks, $80 for up to 5 trucks, more than 5 trucks by quote. All prices in Canadian dollars (CAD). Everyone included. Built in Montreal by a moving company owner. Shows the true profit of every job.
+
+## Pages
+
+- [Home](https://crewfinding.com/): what CrewFinding does, the live crew map, and how a job flows from dispatch to paid
+- [Pricing](https://crewfinding.com/pricing/): from $40 a month priced by truck, compared against per-seat competitors
+- [For moving companies](https://crewfinding.com/moving/): GPS crews, signed BOLs, and true profit per move
+- [For trucking and logistics companies](https://crewfinding.com/trucking-logistics/): GPS arrivals at the dock, BOLs and PODs signed on a phone, detention time on the clock, true profit per run
+- [For landscaping crews](https://crewfinding.com/landscaping/): GPS crews, time per yard, and profit per lawn
+- [For junk removal crews](https://crewfinding.com/junk-removal/): GPS crews, before-and-after photos, dump fees on the right job, profit per load
+- [What is CrewFinding?](https://crewfinding.com/what-is-crewfinding/): explainer for clients who signed a document in the app
+
+## Facts
+
+- Pricing: $40 a month for up to 2 trucks, $60 for 3 trucks, $80 for up to 5 trucks, 6 or more trucks by quote. No per-seat fees. GPS tracking included (Housecall Pro charges extra for vehicle GPS).
+- Platforms: iOS and Android.
+- Audience: service crews only (moving, delivery, landscaping, roofing, construction, electrical, field services), typically 2 to 5 crews. Also built for viewing operations from a distance: logistics companies and lead-generation brokers tracking crews doing the job — including crews they don't own.
+- Every step on a job is time-stamped and saved to the job file; signed documents cannot be lost.
+- Photo proof of completed work: crews snap a photo at every delivery stop or finished yard, and it files with the time and GPS stamp — proof of delivery for couriers, proof the yard is done for landscapers.
+
+- Scheduling and dispatch: assign jobs to your own crews, your partners or subcontractors, build routes and send each crew their day. Works for any service business: moving, landscaping, junk removal, delivery and more.
+- Job tracking: once the crew arrives the job sheet is signed on their phone and GPS tracking starts; every hand-off is signed and time-stamped, and at the destination the recipient signs and proof of delivery is filed, so the owner follows the job all the way to the final mile. The logistics version, with carriers and bills of lading, lives on the trucking and logistics page.
+- Also included: quotes and estimates, invoicing, client notifications (for example "your crew is on the way"), before and after job photos, review requests sent to the customer after the job so good reviews grow the business, customer list and history, offline mode, truck costs and maintenance logged as expenses per truck, and any language for the app.
+
+## Contact
+
+- Website: https://crewfinding.com
+- App: available on the App Store and Google Play (search "CrewFinding")

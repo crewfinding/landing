@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>CrewFinding | Know what every job really makes · GPS crew tracking, from $40/mo</title>
+<meta name="description" content="CrewFinding puts your crews on a live map, gets every paper signed and filed, and shows you what every job really made. Priced by truck, from $40 a month. Everyone included, never per seat. Moving, delivery, landscaping, construction, electrical.">
+<link rel="alternate" hreflang="en" href="https://crewfinding.com/">
+<link rel="alternate" hreflang="fr" href="https://crewfinding.com/fr/">
+<link rel="alternate" hreflang="x-default" href="https://crewfinding.com/">
+<meta property="og:title" content="CrewFinding. Know what every job really makes.">
+<meta property="og:description" content="Your crews on a live map. Paperwork that files itself. The true profit of every job. Priced by truck, from $40 a month. Everyone included, never per seat.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://crewfinding.com/">
+<meta property="og:image" content="https://crewfinding.com/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B1F3A'/%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%23FFD100' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='2.2' fill='%23FFD100'/%3E%3Cpath d='M12 2v3M12 19v3M2 12h3M19 12h3' stroke='%23FFD100' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<!-- ============ MEASUREMENT (wire before launch; confirmed required) ============
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');            // TODO: GA4 property ID
+  gtag('config', 'AW-XXXXXXXXXX');           // TODO: Google Ads conversion ID
+</script>
+<script> /* TODO: Meta pixel init here */ </script>
+=============================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cf.css">
+<link rel="stylesheet" href="assets/cf-dispatch.css">
+<link rel="stylesheet" href="assets/cf-live.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CrewFinding",
+  "operatingSystem": "iOS, Android",
+  "applicationCategory": "BusinessApplication",
+  "featureList": ["GPS crew tracking","Time clock","E-signed contracts, job sheets and waivers","Job costing","Crew timesheets","Payment collection","Scheduling and dispatch to your own crews, partners and subcontractors","Route planning","Job tracking from the signed job sheet to the customer sign-off with every hand-off logged","Quotes and estimates","Invoicing","Client notifications","Job photos","Review requests after every job","Customer history","Offline mode","Truck costs and maintenance","Any language","AI insights"],
+  "description": "Crew operations app that dispatches work to your own crews, partners and subcontractors and tracks every job from dispatch to payout. GPS, hours, e-signatures, expenses and payments, so owners know the true profit of every job.",
+  "offers": { "@type": "AggregateOffer", "lowPrice": "40", "highPrice": "80", "priceCurrency": "CAD", "offerCount": "3", "description": "Priced by truck: $40 a month for up to 2 trucks, $60 for 3 trucks, $80 for up to 5 trucks. More than 5 trucks, contact us. Everyone included." }
+}
+</script>
+
+<style>
+/* Homepage-only CSS. Tokens, base type, nav, buttons, badges, cards, footer and band system live in assets/cf.css. */
+
+.beatcopy p{color:var(--fg-body);max-width:540px;margin:18px 0 24px;font-size:17.5px;line-height:1.7}
+.beatcopy h2{font-size:clamp(32px,4.4vw,56px);max-width:660px}
+.tl-copy p{color:var(--fg-body) !important;font-size:17.5px;line-height:1.7}
+.founder p{color:var(--fg-body) !important}
+
+/* ================= ATMOSPHERE ================= */
+.pool{position:absolute;pointer-events:none;z-index:0}
+.beat-inner{position:relative;z-index:1}
+/* no flat dead zones: faint city texture under every NIGHT beat */
+.stage{position:relative}
+#timeline .stage::before,#close .stage::before,
+#filed::before,#costs::before,#ai::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url(assets/city-basemap.webp) center/cover no-repeat;
+  opacity:.11;
+  -webkit-mask-image:radial-gradient(ellipse 95% 85% at 50% 50%,#000 25%,transparent 80%);
+  mask-image:radial-gradient(ellipse 95% 85% at 50% 50%,#000 25%,transparent 80%);
+}
+#costs::before,#ai::before{background-position:left 30%}
+#filed::before{background-position:right 60%}
+
+/* ================= BEAT 1 · HERO ================= */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.mapwrap{position:absolute;inset:-6%}
+.mapwrap svg{width:100%;height:100%;display:block;position:relative;z-index:1}
+.mapwrap video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.4s ease-out;
+}
+.mapwrap video.on{opacity:1}
+.mapwrap video.on + svg #citybase{opacity:0;transition:opacity 1.4s ease-out}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(7,20,38,.84) 0%,rgba(7,20,38,.5) 30%,rgba(7,20,38,.06) 56%,transparent 74%),
+    linear-gradient(180deg,rgba(7,20,38,.3) 0%,transparent 22%,transparent 62%,var(--night) 100%);
+}
+@media(max-width:720px){
+  .hero::after{background:
+    linear-gradient(180deg,rgba(7,20,38,.55) 0%,rgba(7,20,38,.78) 46%,var(--night) 100%)}
+}
+.herocontent{position:relative;z-index:2;padding:130px 24px 170px;width:100%}
+.hero h1{
+  font-size:clamp(46px,6.8vw,98px);line-height:.98;letter-spacing:-.034em;
+  max-width:840px;text-shadow:0 2px 40px rgba(7,20,38,.95);
+}
+.hero h1 .hl{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+.hero h1 .hl span{display:block}
+.hero .sub{
+  color:#D5E0EE;font-size:clamp(17px,2vw,20px);max-width:600px;margin:26px 0 36px;
+  text-shadow:0 1px 20px rgba(7,20,38,.95);
+}
+.hero .sub strong{color:#fff;font-weight:700}
+.p-promise{text-align:center;color:var(--fg);font-size:16.5px;line-height:1.6;max-width:600px;margin:1.8vh auto 0;padding:0 20px}
+.closenote{font-weight:600;font-size:12.5px;letter-spacing:.12em;color:#A9BBD3;margin-top:16px}
+.heroseo{margin-top:38px;display:flex;gap:22px;flex-wrap:wrap}
+.hud{
+  position:absolute;top:86px;right:28px;z-index:2;
+  font-weight:700;font-size:12px;letter-spacing:.16em;color:#B8C8DE;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(7,20,38,.55);border:1px solid rgba(255,209,0,.3);border-radius:99px;padding:7px 14px;backdrop-filter:blur(6px);
+}
+.hud i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:blinkdot 1.6s ease-in-out infinite}
+@keyframes blinkdot{50%{opacity:.25}}
+@media(max-width:720px){.hud{top:70px;right:14px;font-size:10.5px;padding:6px 11px}}
+.scrollcue{
+  position:absolute;bottom:62px;left:50%;transform:translateX(-50%);z-index:2;white-space:nowrap;
+  font-weight:700;font-size:12px;letter-spacing:.2em;color:#B8C8DE;
+  animation:cue 2.4s ease-in-out infinite;
+}
+@keyframes cue{0%,100%{opacity:.45;transform:translate(-50%,0)}50%{opacity:1;transform:translate(-50%,7px)}}
+
+/* ================= INSIDE THE APP (ivory band) ================= */
+#appgrid{padding:17vh 0 14vh;overflow:hidden}
+.appintro{color:var(--fg-body);max-width:580px;margin:18px 0 0;font-size:17.5px;line-height:1.7}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:46px}
+@media(max-width:1000px){.agrid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.agrid{grid-template-columns:1fr}}
+
+/* ================= BEAT 2 · MORPHING TIMELINE (pinned, night) ================= */
+#timeline .stage{min-height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+#timeline .pool{left:50%;top:-6%;width:1200px;height:420px;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(255,209,0,.06),transparent 65%)}
+.tl-head{text-align:center}
+.tl-head h2{font-size:clamp(32px,4.6vw,58px)}
+.tl-sub{color:var(--fg-body);max-width:640px;margin:16px auto 0;font-size:16.5px;line-height:1.7}
+.tl-figure{margin:2vh auto 0;width:min(1240px,95vw)}
+.tl-badges{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.tl-badges span{
+  font-weight:700;font-size:12.5px;letter-spacing:.08em;color:#DCE5F0;
+  border:1px solid var(--line);border-radius:99px;padding:8px 16px;background:rgba(13,34,64,.6);
+}
+.ghostnode{opacity:.75}
+.tilt-hint{
+  display:none;margin:20px auto 0;width:fit-content;
+  font-weight:600;font-size:13.5px;color:#FFE27A;
+  border:1px solid rgba(255,209,0,.45);border-radius:99px;padding:9px 18px;
+  background:rgba(255,209,0,.08);
+}
+@media(max-width:820px){.tilt-hint{display:block}}
+.tl-figure svg{width:100%;height:auto;display:block;overflow:visible}
+.tl-line{stroke:#2B4766;stroke-width:2;stroke-dasharray:10 12;stroke-linecap:round}
+#tlprogress{stroke:var(--gold);stroke-width:3.5;stroke-linecap:round;filter:drop-shadow(0 0 7px rgba(255,209,0,.7))}
+.node .dot{fill:var(--night);stroke:#44607F;stroke-width:2.5;transition:all .35s ease-out;transform-box:fill-box;transform-origin:center}
+.node.done .dot{fill:var(--gold);stroke:var(--gold);filter:drop-shadow(0 0 8px rgba(255,209,0,.6))}
+.node .chk{opacity:0;transition:opacity .3s ease-out}
+.node .chk path{stroke:var(--deep)}
+.node.done .chk{opacity:1}
+.node .yard{fill:#0B1D36;stroke:#44607F;stroke-width:2.5;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.4);transition:all .35s ease-out}
+.node.done .yard{stroke:var(--gold);fill:#102A4C;filter:drop-shadow(0 0 8px rgba(255,209,0,.45))}
+svg.ph-c .node .chk path{stroke:var(--gold)}
+.node .yardtime{opacity:0;transition:opacity .35s ease-out;font-family:var(--data);font-weight:700;font-size:17px;fill:#fff}
+.tl-label{font-family:var(--data);font-weight:700;font-size:16px;fill:#fff;letter-spacing:.04em}
+.tl-sublabel{font-family:var(--data);font-size:14px;fill:var(--fg-mute)}
+.tl-endlabel{transition:opacity .35s ease-out}
+svg.ph-a .node.mid:not(.na) .dot{transform:scale(0)}
+svg.ph-a .node .yard,svg.ph-a .node .yardtime{opacity:0}
+/* phase-scoped detail layers: A = named legs + times, B = stop proof */
+#tlsvg .a-only,#tlsvg .b-only,#tlsvg .c-only{opacity:0;transition:opacity .4s ease-out}
+#tlsvg.ph-a .a-only,#tlsvg.ph-b .b-only,#tlsvg.ph-c .c-only{opacity:1}
+.ph-emoji{font-size:20px}
+.bsub,.csub{font-family:var(--data);font-weight:500;font-size:13px;fill:#A9BBD3}
+.cprice{font-family:var(--data);font-weight:600;font-size:13.5px;fill:#CFD9E7}
+.ckept{font-family:var(--data);font-size:16px;font-weight:700}
+.alabel{font-family:var(--data);font-weight:700;font-size:14.5px;fill:#fff;letter-spacing:.06em}
+.asub{font-family:var(--data);font-weight:500;font-size:13px;fill:#A9BBD3}
+.seg{font-family:var(--data);font-weight:600;font-size:14px;fill:#A9BBD3}
+.seg.hot{fill:#fff}
+.stoptime{font-family:var(--data);font-weight:700;font-size:15px;fill:#fff;opacity:0;transition:opacity .3s ease-out}
+svg.ph-b .node.done .stoptime{opacity:1}
+.proof{font-size:13px;opacity:0;transition:opacity .3s ease-out}
+svg.ph-b .node.done .proof{opacity:1}
+svg.ph-b .node .dot{transform:scale(1)}
+svg.ph-b .tl-endlabel{opacity:0}
+svg.ph-c .node .dot{transform:scale(0)}
+svg.ph-c .node .chk{opacity:0}
+svg.ph-c .node.done .chk{opacity:1}
+svg.ph-c .node .yard{opacity:1;transform:scale(1)}
+svg.ph-c .node .yardtime{opacity:1}
+svg.ph-c .tl-endlabel{opacity:0}
+.tl-copies{position:relative;height:210px;margin-top:2vh}
+@media(max-width:720px){.tl-copies{height:280px}}
+.tl-copy{
+  position:absolute;inset:0;text-align:center;opacity:0;transform:translateY(14px);
+  transition:opacity .45s ease-out,transform .45s ease-out;pointer-events:none;
+}
+.tl-copy.on{opacity:1;transform:none;pointer-events:auto}
+.tl-copy h3{font-size:clamp(26px,3.4vw,38px);margin-bottom:10px}
+.tl-copy p{color:var(--fg-mute);max-width:580px;margin:0 auto 16px}
+.tl-dots{display:flex;gap:8px;justify-content:center;margin-top:24px}
+.tl-dots i{width:30px;height:3px;border-radius:2px;background:var(--line);transition:background .3s}
+.tl-dots i.on{background:var(--gold)}
+/* ---- timeline v2: a real road, stop choreography, live panel ---- */
+.road{fill:url(#roadg);stroke:#1E3A5C;stroke-width:1.5}
+.road-edge{stroke:#2E5078;stroke-width:1.5;opacity:.7}
+.lawn{display:none}
+svg.ph-c .lawn{display:block}
+svg.ph-c .road,svg.ph-c .road-edge,svg.ph-c .tl-line{display:none}
+svg.ph-c #tlbeam,svg.ph-c #tltail{display:none}
+.ring{fill:none;stroke:var(--gold);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+.node.ping .ring{animation:ringping 1.15s ease-out both}
+.node.ping .r2{animation-delay:.2s}
+@keyframes ringping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.6);opacity:0}}
+svg.ph-a .node.mid:not(.na) .ring{display:none}
+svg.ph-b .node.stamped .stoptime{animation:stampin .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stampin{0%{transform:scale(1.8);opacity:0;fill:var(--gold)}100%{transform:scale(1);opacity:1}}
+.stoptime{transform-box:fill-box;transform-origin:center}
+.proofrow{opacity:0;transition:opacity .3s ease-out}
+svg.ph-b .node.done .proofrow{opacity:1}
+.pf circle{fill:#0B1D36;stroke:#44607F;stroke-width:1.6;transition:stroke .25s,fill .25s,filter .25s}
+.pf text{font-size:11px;opacity:.38;transition:opacity .25s}
+.pf{transform-box:fill-box;transform-origin:center}
+.node.p1 .pf1,.node.p2 .pf2,.node.p3 .pf3{animation:pfpop .45s cubic-bezier(.2,1.6,.4,1) both}
+.node.p1 .pf1 circle,.node.p2 .pf2 circle,.node.p3 .pf3 circle{stroke:var(--gold);fill:#14305A;filter:drop-shadow(0 0 6px rgba(255,209,0,.7))}
+.node.p1 .pf1 text,.node.p2 .pf2 text,.node.p3 .pf3 text{opacity:1}
+@keyframes pfpop{0%{transform:scale(.4)}100%{transform:scale(1)}}
+#tlbeam{opacity:.15}
+#tlveh{filter:drop-shadow(0 0 5px rgba(255,209,0,.6)) drop-shadow(0 2px 3px rgba(0,0,0,.55))}
+.tl-hud{display:grid;grid-template-columns:1.3fr .8fr 1fr 1fr;gap:10px;margin-top:1.6vh;max-width:1040px;margin-left:auto;margin-right:auto}
+.hud-cell{background:rgba(13,34,64,.7);border:1px solid #1F3A5E;border-radius:12px;padding:9px 14px 10px;text-align:left;min-height:58px}
+.hud-k{display:block;font-weight:700;font-size:11px;letter-spacing:.14em;color:#9DB1CC}
+.hud-v{display:block;font-weight:700;font-size:19px;color:#fff;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-v.live{color:var(--gold)}
+.hud-v.profit{color:#2EE86C}
+.hud-v.loss{color:#FF4438}
+.hud-v.tick{animation:hudtick .35s ease-out}
+@keyframes hudtick{0%{transform:translateY(5px);opacity:.3}100%{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.node.ping .ring,svg.ph-b .node.stamped .stoptime,.node.p1 .pf1,.node.p2 .pf2,.node.p3 .pf3,.hud-v.tick{animation:none}}
+
+
+/* ================= BEAT 3 · FILED (night) ================= */
+#filed{padding:19vh 0}
+#filed .pool{right:0;top:50%;width:900px;height:900px;transform:translateY(-50%);
+  background:radial-gradient(circle,rgba(0,90,190,.24),transparent 62%)}
+.filedgrid{display:grid;grid-template-columns:1fr 1.05fr;gap:60px;align-items:center}
+@media(max-width:880px){.filedgrid{grid-template-columns:1fr;gap:30px}}
+/* the dossier lives in the phone: docs float out of it, hover pulls one forward */
+.dossier{position:relative;width:min(440px,86vw);margin:0 auto;padding-top:170px}
+.d-phone{
+  position:relative;display:block;width:46%;margin:0 auto;z-index:2;
+  filter:drop-shadow(0 0 22px rgba(255,209,0,.28)) drop-shadow(0 26px 50px rgba(0,0,0,.6));
+}
+.d-doc{
+  position:absolute;width:108px;left:50%;top:0;z-index:1;
+  transform:translateX(calc(-50% + var(--dx)*var(--k,1))) rotate(var(--dr));
+  transition:transform .35s ease-out,filter .35s ease-out;
+  animation:docfloat 5.5s ease-in-out infinite,docshine 3.4s ease-in-out infinite alternate;animation-delay:var(--dd),var(--dd);
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.9)) drop-shadow(0 0 20px rgba(255,238,170,.7)) drop-shadow(0 0 46px rgba(255,209,0,.45));
+  cursor:pointer;
+}
+.d-doc:hover,.d-doc.lift{
+  transform:translateX(calc(-50% + var(--dx)*var(--k,1))) rotate(0deg) translateY(-30px) scale(1.14);
+  filter:drop-shadow(0 0 8px #fff) drop-shadow(0 0 30px rgba(255,244,190,.95)) drop-shadow(0 0 70px rgba(255,209,0,.7));
+  z-index:3;
+}
+.mrow{cursor:pointer;transition:color .25s ease-out}
+.mrow:hover span:first-child b{color:var(--gold)}
+@keyframes docfloat{0%,100%{margin-top:0}50%{margin-top:-12px}}
+@keyframes docshine{from{filter:drop-shadow(0 0 4px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,238,170,.5)) drop-shadow(0 0 36px rgba(255,209,0,.3))}to{filter:drop-shadow(0 0 7px #fff) drop-shadow(0 0 28px rgba(255,244,190,.95)) drop-shadow(0 0 64px rgba(255,209,0,.65))}}
+.dossier::before{content:"";position:absolute;left:50%;top:6%;width:130%;aspect-ratio:1.5;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,233,150,.32),rgba(255,209,0,.12) 55%,transparent 75%);pointer-events:none;z-index:0}
+@media(prefers-reduced-motion:reduce){.d-doc{animation:none}}
+@media(max-width:880px){.dossier{padding-top:130px}.d-doc{width:84px;--k:.72}}
+.manifest{margin-top:8px;max-width:480px}
+.mrow{
+  display:flex;justify-content:space-between;gap:14px;padding:14px 2px;
+  border-bottom:1px solid var(--line);
+  font-size:16px;color:#DCE5F0;
+  opacity:0;transform:translateX(-16px);
+  position:relative;overflow:hidden;
+}
+/* one job or a whole route: same filing, nothing lost */
+.daystrip{
+  margin-top:26px;max-width:480px;
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  background:rgba(13,34,64,.6);opacity:0;transform:translateY(14px);
+}
+.daystrip .dayhead{font-weight:700;font-size:12px;letter-spacing:.16em;color:var(--fg-mute);margin-bottom:10px}
+.daystrip .daycount{font-size:16px;color:#DCE5F0}
+.daystrip .daycount b{color:#fff;font-weight:700}
+.daystrip .dayzero{
+  display:inline-block;margin-top:12px;font-weight:700;font-size:13px;letter-spacing:.12em;
+  color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:5px 14px;
+}
+.mrow b{font-weight:700;color:#fff}
+.mrow .st{color:var(--fg-mute)}
+.mrow::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);
+  transform:translateX(-130%);
+}
+.mrow.shine::after{animation:shimmer .9s ease-out forwards}
+@keyframes shimmer{to{transform:translateX(130%)}}
+.filedchip{
+  display:inline-block;margin-top:22px;
+  font-weight:700;font-size:13px;letter-spacing:.12em;
+  color:#fff;border:1px solid rgba(255,209,0,.55);border-radius:99px;padding:6px 16px;
+  opacity:0;transform:translateY(8px);
+}
+
+/* ================= BEAT 4 · MICRO EXPENSES (night) ================= */
+#costs{padding:19vh 0}
+#costs .pool{left:-100px;bottom:0;width:900px;height:800px;
+  background:radial-gradient(circle,rgba(255,209,0,.07),transparent 62%)}
+.costgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center}
+@media(max-width:880px){.costgrid{grid-template-columns:1fr;gap:30px}}
+.stormwrap{position:relative}
+.storm{
+  width:100%;max-width:560px;display:block;margin:0 auto;
+  -webkit-mask-image:radial-gradient(ellipse closest-side,#000 62%,transparent 96%);
+  mask-image:radial-gradient(ellipse closest-side,#000 62%,transparent 96%);
+}
+.ledger{
+  background:rgba(7,22,44,.88);border:1px solid rgba(255,255,255,.13);border-top:2px solid var(--gold);border-radius:14px;padding:28px 28px 22px;
+  font-size:16px;backdrop-filter:blur(4px);
+  max-width:560px;
+}
+.ledger .lhead{color:var(--fg-mute);font-weight:700;font-size:12.5px;letter-spacing:.1em;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:6px}
+.lrow{
+  display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);
+  opacity:0;transform:translateY(12px);
+}
+.lrow span:first-child{color:#CFD9E7}
+.lrow .amt{color:var(--gold);font-weight:700}
+.lrow.billed span:first-child{color:#fff;font-weight:600}
+.lrow.billed .amt{color:#fff}
+.lteaser{margin-top:14px;font-size:13.5px;color:var(--fg-mute);text-align:right}
+/* living job bill */
+.ledger{position:relative;overflow:hidden}
+.ledger::before{content:"";position:absolute;left:-35%;top:0;width:35%;height:2px;background:linear-gradient(90deg,transparent,#fff,var(--gold),transparent);filter:drop-shadow(0 0 6px rgba(255,209,0,.9));animation:ledsweep 3.6s ease-in-out infinite}
+@keyframes ledsweep{0%{left:-35%}60%,100%{left:100%}}
+.ledger .lhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.livepill{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:11px;letter-spacing:.14em;border:1px solid rgba(255,209,0,.45);border-radius:999px;padding:3px 9px 3px 8px}
+.livepill i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:livepulse 1.4s ease-in-out infinite}
+@keyframes livepulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.billbar{margin:14px 0 8px}
+.bb-track{display:flex;height:16px;border-radius:9px;background:rgba(255,255,255,.07);overflow:hidden;gap:2px}
+.bb-seg{display:block;height:100%;width:0;background:linear-gradient(180deg,#FFE27A,#FFD100);box-shadow:0 0 12px rgba(255,209,0,.55);flex:none}
+.bb-seg.s4{background:linear-gradient(180deg,#fff,#FFE27A)}
+.bb-rest{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;border:1px dashed #44607F;border-radius:0 9px 9px 0;color:#9DB1CC;font-style:normal;font-weight:700;font-size:11px;position:relative;overflow:hidden}
+.bb-rest::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.16) 50%,transparent 70%);transform:translateX(-100%);animation:restshim 2.8s ease-in-out infinite}
+@keyframes restshim{0%{transform:translateX(-100%)}70%,100%{transform:translateX(100%)}}
+.bb-cap{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.1em;color:#9DB1CC}
+.bb-cap b{color:var(--gold)}
+.lrow .amt{font-variant-numeric:tabular-nums}
+.lrow.flash{animation:rowflash 1.1s ease-out}
+@keyframes rowflash{0%{background:rgba(255,209,0,.26)}100%{background:rgba(255,209,0,0)}}
+.stamp{display:inline-block;margin-left:10px;padding:2px 8px;border:1.5px solid var(--gold);border-radius:6px;color:var(--gold);font-size:10.5px;font-weight:700;letter-spacing:.12em;transform:rotate(-4deg) scale(0);opacity:0;vertical-align:middle;box-shadow:0 0 12px rgba(255,209,0,.5)}
+.stamp.on{animation:stampthud .5s cubic-bezier(.2,1.7,.4,1) forwards}
+@keyframes stampthud{0%{transform:rotate(-4deg) scale(2.2);opacity:0}100%{transform:rotate(-4deg) scale(1);opacity:1}}
+.ltotal .amt{text-shadow:0 0 18px rgba(255,209,0,.0);transition:text-shadow .3s}
+.ltotal .amt.tick{text-shadow:0 0 18px rgba(255,209,0,.8)}
+@media(prefers-reduced-motion:reduce){.ledger::before,.livepill i,.bb-rest::after,.lrow.flash{animation:none}.stamp{transform:rotate(-4deg);opacity:1}}
+.ltotal{
+  display:flex;justify-content:space-between;padding:17px 0 4px;font-weight:700;font-size:17px;
+  opacity:0;
+}
+.ltotal .amt{color:var(--gold)}
+
+/* ================= BEAT 5 · AI (night) ================= */
+#ai{padding:19vh 0}
+#ai .pool{right:-80px;top:40%;width:800px;height:800px;transform:translateY(-50%);
+  background:radial-gradient(circle,rgba(0,90,190,.22),transparent 60%)}
+.aigrid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center}
+@media(max-width:880px){.aigrid{grid-template-columns:1fr;gap:36px}}
+/* the AI answers from the phone: orb of your numbers rising out of the app */
+.aiwrap{position:relative;width:min(430px,92vw);margin:0 auto;padding-top:170px}
+.ai-orb{
+  position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:350px;z-index:1;
+  animation:orbbob 8s ease-in-out infinite;pointer-events:none;
+}
+@keyframes orbbob{0%,100%{margin-top:0}50%{margin-top:-16px}}
+.aiphone{
+  position:relative;z-index:2;
+  background:rgba(8,24,48,.95);border:1.5px solid #25405F;border-radius:34px;
+  padding:56px 22px 28px;min-height:400px;
+  box-shadow:0 30px 70px rgba(0,0,0,.6);backdrop-filter:blur(4px);
+}
+.ainotch{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:86px;height:9px;border-radius:6px;background:#1B3558}
+.a .arow .kept{color:var(--profit-t);font-weight:700}
+.q{
+  font-weight:600;font-size:16px;color:#fff;
+  border:1px solid #2C4A6E;border-radius:12px;padding:15px 17px;background:#091B35;
+}
+.q .cursor{display:inline-block;width:8px;height:16px;background:var(--gold);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.a{margin-top:20px}
+.a .arow{
+  display:flex;justify-content:space-between;gap:10px;font-size:15.5px;
+  padding:12px 2px;border-bottom:1px solid var(--line);opacity:0;transform:translateY(10px);
+}
+.a .arow span:first-child{color:#CFD9E7}
+.a .insight{font-size:15.5px;color:#B8C8DE;margin-top:16px;padding-left:12px;border-left:2px solid var(--gold);opacity:0}
+
+/* ================= FOUNDER + THIS IS YOU (ivory band) ================= */
+.founder{padding:15vh 24px 14vh;text-align:center;overflow:hidden}
+.founder p{position:relative;z-index:1}
+.founder p{max-width:660px;margin:0 auto;color:var(--fg-body);font-size:clamp(18px,2.2vw,22px);line-height:1.7}
+.founder p strong{color:var(--fg);font-weight:700}
+.founder .youhead{position:relative;z-index:1;font-size:clamp(30px,4.2vw,52px);max-width:760px;margin:9vh auto 0}
+.founder p.you{color:var(--fg-body);font-size:17.5px;margin-top:22px}
+.whostrip{position:relative;z-index:1;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.whostrip a{
+  font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--fg);
+  border:1px solid var(--card-line);border-radius:99px;padding:9px 18px;background:#fff;
+  text-decoration:none;transition:border-color .2s ease-out,transform .2s ease-out,box-shadow .2s ease-out;
+  box-shadow:0 4px 14px rgba(11,31,58,.06);
+}
+.whostrip a:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 22px rgba(11,31,58,.14)}
+/* the distance set piece: a phone watching the live map from anywhere */
+.yougrid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;max-width:1060px;margin:10px auto 0;text-align:left}
+.yougrid .you{margin:22px 0 0;max-width:560px}
+@media(max-width:880px){
+  .yougrid{grid-template-columns:1fr;gap:40px;text-align:center}
+  .yougrid .you{margin:22px auto 0}
+}
+.watchwrap{width:min(300px,86vw);margin:0 auto}
+.watchphone{
+  position:relative;background:linear-gradient(180deg,#0C2240,var(--night));border:1.5px solid #25405F;border-radius:32px;
+  padding:46px 14px 14px;box-shadow:0 30px 70px rgba(11,31,58,.38),0 0 0 6px rgba(255,209,0,.12);
+}
+.wnotch{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:76px;height:8px;border-radius:6px;background:#1B3558}
+.whead{display:flex;align-items:center;gap:8px;font-weight:700;font-size:11px;letter-spacing:.12em;color:#B8C8DE;margin-bottom:10px}
+.whead i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:blinkdot 1.6s ease-in-out infinite;flex:none}
+.wmap{position:relative;border-radius:12px;overflow:hidden;border:1px solid #1B3558;aspect-ratio:4/5;background:var(--night)}
+.wmap .wbase{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.wpin{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%)}
+.wpin img{width:30px;display:block;filter:drop-shadow(0 0 10px rgba(255,209,0,.65));animation:docfloat 6s ease-in-out infinite;animation-delay:var(--wd,0s)}
+.wpin::before{
+  content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;
+  border:2px solid rgba(255,209,0,.7);transform:translate(-50%,-50%);animation:wring 2.6s ease-out infinite;animation-delay:var(--wd,0s);
+}
+@keyframes wring{0%{width:12px;height:12px;opacity:.7}100%{width:58px;height:58px;opacity:0}}
+.wrow{display:flex;justify-content:space-between;gap:10px;font-weight:600;font-size:12.5px;color:#DCE5F0;padding:9px 2px;border-bottom:1px solid #1B3558}
+.wrow:last-child{border-bottom:none}
+.wrow .st{color:#2EE86C}
+.wcap{text-align:center;margin-top:18px;font-weight:700;font-size:12px;letter-spacing:.18em;color:var(--fg-mute)}
+
+/* ================= BEAT 6 · ADD A TRUCK (interactive, white band) ================= */
+#pricing{border-top:1px solid var(--line);overflow:hidden}
+#pricing .stage{min-height:0;display:block;overflow:visible;padding:96px 0 40px}
+.p-head{text-align:center}
+.p-head h2{font-size:clamp(30px,4vw,50px)}
+.p-sub{font-size:16.5px;color:var(--fg-mute);margin-top:12px}
+.fleetcalc{width:min(780px,92vw);margin:34px auto 0}
+.fc-fleet{background:var(--ivory);border:1px solid var(--card-line);border-radius:20px;padding:20px 22px 24px;box-shadow:0 18px 44px rgba(11,31,58,.1)}
+.fc-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.fc-count{font-weight:600;font-size:16px;color:var(--fg-mute)}
+.fc-count b{color:var(--fg);font-size:24px;font-variant-numeric:normal}
+.fc-ctrl{display:flex;gap:10px;align-items:center}
+.fc-add{font:inherit;font-weight:700;font-size:15.5px;color:var(--deep);background:var(--gold);border:0;border-radius:12px;padding:13px 22px;cursor:pointer;box-shadow:0 8px 22px rgba(255,209,0,.4);transition:transform .15s ease-out,box-shadow .15s ease-out}
+.fc-add:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,209,0,.5)}
+.fc-add:active{transform:none}
+.fc-minus{font:inherit;font-weight:700;font-size:22px;line-height:1;width:46px;height:46px;border-radius:12px;border:1.5px solid var(--card-line);background:#fff;color:var(--fg);cursor:pointer}
+.fc-minus:hover{border-color:var(--fg)}
+.fc-add:disabled,.fc-minus:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.fc-add:focus-visible,.fc-minus:focus-visible{outline:3px solid var(--deep);outline-offset:3px}
+.fc-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;min-height:160px}
+.fc-t{width:calc((100% - 36px)/4);background:var(--night);border:1px solid #1B3558;border-radius:14px;padding:14px 10px 10px;overflow:hidden;text-align:center;box-shadow:inset 0 0 26px rgba(255,209,0,.07);animation:fcdrive .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fcdrive{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+.fc-t img{display:block;width:100%;height:78px;object-fit:contain;margin:0 auto;filter:drop-shadow(0 0 9px rgba(255,209,0,.55));animation:fclight .9s ease-out .25s both}
+@keyframes fclight{from{filter:brightness(.32) saturate(.5) drop-shadow(0 0 0 rgba(255,209,0,0))}60%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,209,0,.8))}to{filter:drop-shadow(0 0 9px rgba(255,209,0,.55))}}
+.fc-t .seats{display:flex;justify-content:center;gap:4px;margin-top:9px}
+.fc-t .seats i{width:9px;height:9px;border-radius:50%;background:var(--gold);display:block;box-shadow:0 0 8px rgba(255,209,0,.7)}
+.fc-t .nm{display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#9DB1CC;margin-top:6px}
+.fc-duel{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.fc-meter,.fc-plate{border-radius:20px;padding:20px 22px 22px;position:relative;overflow:hidden}
+.fc-meter{background:var(--deep);color:#fff;border:1px solid #1B3558;box-shadow:inset 0 2px 18px rgba(0,0,0,.45),0 18px 40px rgba(11,31,58,.22)}
+.fc-plate{background:var(--gold);color:var(--deep);box-shadow:0 18px 44px rgba(255,209,0,.4),inset 0 1px 0 rgba(255,255,255,.55)}
+.fc-lab{font-weight:700;font-size:12.5px;letter-spacing:.12em}
+.fc-lab i{font-style:normal;margin-left:8px;padding:3px 8px;border-radius:99px;font-size:11px}
+.fc-meter .fc-lab{color:#9DB1CC}
+.fc-meter .fc-lab i{background:rgba(255,255,255,.1);color:#fff}
+.fc-plate .fc-lab i{background:rgba(11,31,58,.12)}
+.fc-digits{display:flex;align-items:flex-end;font-size:clamp(46px,7.4vw,66px);font-weight:700;letter-spacing:-.03em;line-height:1;margin-top:14px;font-variant-numeric:normal}
+.fc-digits .cur{font-size:.55em;margin-right:4px;padding-bottom:.12em}
+.fc-digits .per{font-size:.3em;letter-spacing:0;margin-left:8px;padding-bottom:.2em;opacity:.8}
+.odo{display:inline-flex}
+.odo .d{display:block;height:1em;width:.62em;overflow:hidden;line-height:1}
+.odo .s{display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.odo .s b{display:block;height:1em;line-height:1;text-align:center;font-weight:700}
+.fc-sub{font-weight:600;font-size:13px;letter-spacing:.04em;margin-top:12px;min-height:20px}
+.fc-meter .fc-sub{color:#9DB1CC}
+.fc-ok{display:inline-block}
+.fc-ok.pop{animation:fcpop .5s ease-out}
+@keyframes fcpop{0%{transform:translateY(6px);opacity:0}100%{transform:none;opacity:1}}
+.fleetcalc .pdelta{margin-top:22px}
+.fc-more{margin:14px 2px 0;font-weight:600;font-size:14.5px;color:var(--fg-mute)}
+.fc-more a{color:var(--deep);text-decoration:underline;text-underline-offset:3px}
+.fc-digits b.tick{animation:fcpop .45s ease-out}
+.tierstrip a:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:640px){.fc-duel{grid-template-columns:1fr}.fc-t{width:calc((100% - 12px)/2)}.fc-row{min-height:0}}
+@media(prefers-reduced-motion:reduce){.fc-t,.fc-t img,.fc-ok.pop{animation:none}.odo .s{transition:none}}
+.pdelta{text-align:center;font-weight:600;font-size:clamp(15px,1.9vw,19px);color:var(--fg);margin-top:1vh;padding:0 16px;min-height:24px}
+.pdelta .save{color:var(--profit-t);font-weight:700}
+.tierstrip{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:1.6vh}
+.tierstrip span{
+  font-weight:700;font-size:13.5px;letter-spacing:.08em;color:var(--fg);
+  border:1px solid var(--card-line);border-radius:99px;padding:10px 20px;background:var(--ivory);
+}
+.tierstrip b{color:var(--accent);font-size:17px;font-weight:700}
+.p-fine{text-align:center;font-size:13.5px;color:var(--fg-mute);max-width:720px;margin:1.6vh auto 0;line-height:1.65;padding:0 20px}
+.p-links{display:flex;gap:24px;justify-content:center;margin-top:10px;flex-wrap:wrap;padding-bottom:2.5vh}
+
+/* ================= BEAT 7 · THE CLOSE (pinned, night) ================= */
+#close .stage{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden}
+#close .pool{
+  left:50%;top:50%;width:1100px;height:900px;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(46,232,108,.08),transparent 60%);
+  opacity:0;transition:opacity 1.2s ease-out;
+}
+#close .pool.on{opacity:1}
+.closeledger{font-weight:500;font-size:clamp(15px,2vw,18px);color:#CFD9E7}
+.closeledger .cl{
+  display:flex;justify-content:space-between;gap:60px;width:min(430px,86vw);
+  padding:11px 0;border-bottom:1px solid var(--line);
+  opacity:0;transform:translateY(10px);transition:opacity .5s ease-out,transform .5s ease-out;
+}
+.closeledger .cl.on{opacity:1;transform:none}
+.bignum{
+  font-family:var(--disp);font-weight:700;letter-spacing:-.012em;color:var(--profit-t);font-variant-numeric:normal;
+  font-size:clamp(84px,17vw,220px);line-height:1;margin-top:5vh;
+  opacity:0;transition:opacity .6s ease-out,text-shadow 1s ease-out;
+}
+.bignum.on{opacity:1;text-shadow:0 0 90px rgba(46,232,108,.5),0 0 26px rgba(46,232,108,.35)}
+.bignum small{display:block;font-family:var(--body);font-weight:700;font-size:clamp(12.5px,1.5vw,15px);color:var(--profit-t);opacity:.8;letter-spacing:.24em;margin-top:14px;letter-spacing:.22em}
+.closetag{
+  font-family:var(--disp);font-weight:700;letter-spacing:-.03em;font-size:clamp(28px,4.2vw,52px);
+  margin-top:5vh;opacity:0;transform:translateY(12px);transition:opacity .6s ease-out,transform .6s ease-out;
+}
+.closetag.on{opacity:1;transform:none}
+.closetag{text-wrap:balance;padding:0 16px}
+.closebtn{margin-top:36px;opacity:0;transition:opacity .6s ease-out .2s}
+.closebtn.on{opacity:1}
+.closebtn .btn{font-size:17px;padding:16px 38px}
+
+/* ================= MOBILE STICKY CTA ================= */
+.stickycta{
+  position:fixed;left:0;right:0;bottom:0;z-index:85;padding:12px 16px;
+  background:rgba(7,20,38,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px);
+  transform:translateY(110%);transition:transform .3s ease-out;display:none;
+}
+.stickycta.on{transform:none}
+.stickycta .btn{display:block;text-align:center;width:100%}
+@media(max-width:720px){.stickycta{display:block}}
+
+/* ============ MOBILE: pinned cinema becomes a stacked story ============ */
+@media(max-width:820px){
+  #timeline .stage,#pricing .stage{min-height:auto;display:block;padding:70px 0 30px;overflow:visible}
+  #pricing .beat-inner{min-height:auto !important;padding-top:0 !important}
+  .tl-figure{display:none}
+  .tl-copies{position:static;height:auto;margin-top:6px}
+  .tl-copy{position:static;opacity:1;transform:none;pointer-events:auto;margin:26px 0 0}
+  .tl-copy p{margin-left:auto;margin-right:auto}
+  .tl-dots{display:none}
+  .tl-badges{margin-top:20px}
+  .pdelta{min-height:0}
+  .p-fine{margin-bottom:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="nav">
+  <a class="brand" href="/"><span class="cf" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#FFD100" stroke-width="2"/><circle cx="12" cy="12" r="2.4" fill="#FFD100"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke="#FFD100" stroke-width="2" stroke-linecap="round"/></svg></span><span class="wm">Crew<b>Finding</b></span></a>
+  <div class="navlinks">
+    <a class="plain" href="pricing/index.html">Pricing</a>
+    <div class="navdrop">
+      <button class="ndbtn" type="button" aria-haspopup="true">Who it's for <span>▾</span></button>
+      <div class="ndmenu">
+        <div class="ndcard">
+          <a href="moving/index.html">🚚 Moving companies</a>
+          <a href="trucking-logistics/index.html">🚛 Trucking &amp; logistics</a>
+          <a href="landscaping/index.html">🌿 Landscaping crews</a>
+          <a href="junk-removal/index.html">🗑️ Junk removal</a>
+          <span class="ndsoon">MORE TRADES COMING</span>
+        </div>
+      </div>
+    </div>
+    <a class="plain" href="what-is-crewfinding/index.html">What is CrewFinding?</a>
+    <a class="btn small" href="#" data-store>Download CrewFinding</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     BEAT 1 · HERO: the live map. Crews are the light sources.
+============================================================ -->
+<header class="hero" id="hero">
+  <div class="mapwrap" aria-hidden="true">
+    <video id="cityvid" muted loop playsinline preload="none" poster="assets/city-basemap.webp"></video>
+    <svg id="citysvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <filter id="routeglow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="pinhalo">
+          <stop offset="0%" stop-color="#FFD100" stop-opacity=".33"/>
+          <stop offset="100%" stop-color="#FFD100" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="pinfeather" maskContentUnits="objectBoundingBox">
+          <radialGradient id="pfg">
+            <stop offset="55%" stop-color="#fff"/>
+            <stop offset="95%" stop-color="#000"/>
+          </radialGradient>
+          <circle cx=".5" cy=".5" r=".5" fill="url(#pfg)"/>
+        </mask>
+      </defs>
+      <g id="citybase"><image href="assets/city-basemap.webp" x="0" y="0" width="1440" height="900" preserveAspectRatio="xMidYMid slice"/></g>
+      <g id="cityroutes" filter="url(#routeglow)"></g>
+      <g id="citypins"></g>
+    </svg>
+  </div>
+
+  <div class="hud"><i></i>LIVE · 6 CREWS OUT</div>
+
+  <div class="herocontent wrap">
+    <span class="eyebrow" data-hero-reveal>Live crews · true job profit</span>
+    <h1>
+      <span class="hl"><span data-hero-line>Tracked. Signed. <em>Paid.</em></span></span>
+    </h1>
+    <p class="sub" data-hero-reveal>CrewFinding tracks the crews, files the paperwork, and shows you <strong>what every job really made</strong>.</p>
+    <div class="ctarow" data-hero-reveal>
+      <a class="btn" href="#" data-store>Download CrewFinding</a>
+      <div class="badges">
+        <!-- TODO: swap for official store badge artwork + real store URLs -->
+        <a class="badge" href="https://apps.apple.com/app/crewfinding" data-ios>
+          <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          <span><span class="b1">Download on the</span><br><span class="b2">App Store</span></span>
+        </a>
+        <a class="badge" href="https://play.google.com/store/apps/details?id=com.crewfinding" data-android>
+          <svg viewBox="0 0 512 512" fill="#fff"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+          <span><span class="b1">Get it on</span><br><span class="b2">Google Play</span></span>
+        </a>
+      </div>
+    </div>
+    <p class="ctanote" data-hero-reveal>FREE TO DOWNLOAD · FROM $40/MO · PRICED BY TRUCK · NEVER PER SEAT</p>
+    <div class="heroseo" data-hero-reveal>
+      <a class="seolink" href="/gps-tracking">GPS crew tracking</a>
+      <a class="seolink" href="/job-costing">job costing software</a>
+      <a class="seolink" href="pricing/index.html">flat monthly pricing</a>
+    </div>
+  </div>
+  <div class="scrollcue">SCROLL · WATCH IT WORK</div>
+</header>
+
+<!-- UNIVERSAL-START -->
+<!-- ============================================================
+     DISPATCH · any service business: your crews, your partners, your subcontractors, tracked to done
+============================================================ -->
+<section id="dispatch" class="band-night dspsec" data-vertical="roofing" style="padding:14vh 0 6vh;position:relative">
+  <div class="wrap beat-inner">
+    <div class="dsp-top">
+      <div>
+        <span class="eyebrow cool">Scheduling + dispatch</span>
+        <h2>Book the job. Send it to any crew. See it received.</h2>
+      </div>
+      <div class="dsp-copy"><p>Most service businesses don't run every job with their own people. Some go to a partner you trust, or a subcontractor you hire for the day. CrewFinding puts all of it on one dispatch board: your own crews, your partners and your subcontractors. Create the job, pick who does it, set the route and send it. The moment they receive it and accept, you see it, with the time.</p></div>
+    </div>
+    <ol class="flow" data-flow aria-label="How a job moves, from booking to the final mile">
+        <li data-s="1"><i>1</i><b>Book</b><span>Create the job</span></li>
+        <li data-s="2"><i>2</i><b>Assign</b><span>Crew, partner or subcontractor</span></li>
+        <li data-s="3"><i>3</i><b>Received</b><span>Accepted, with the time</span></li>
+        <li data-s="4"><i>4</i><b>Tracked</b><span>Job sheet signed, GPS live</span></li>
+        <li data-s="5"><i>5</i><b>Final mile</b><span>Customer signs off</span></li>
+        <em class="fg g1">SCHEDULING AND DISPATCH</em><em class="fg g2">JOB TRACKING</em>
+      </ol>
+    <div class="vtabs" role="tablist" aria-label="Pick your kind of work to see the same flow for it" data-vtabs><span class="vt-l">SEE IT FOR</span><button type="button" role="tab" data-v="roofing" aria-selected="true">Roofing</button><button type="button" role="tab" data-v="construction" aria-selected="false">Construction</button><button type="button" role="tab" data-v="moving" aria-selected="false">Moving</button><button type="button" role="tab" data-v="landscaping" aria-selected="false">Landscaping</button><button type="button" role="tab" data-v="junk" aria-selected="false">Junk removal</button><button type="button" role="tab" data-v="delivery" aria-selected="false">Delivery</button><a class="vlink" data-vlink href="" hidden>See the full roofing version</a></div>
+    <div class="dispcard" data-board>
+      <div class="sh-head"><span>DISPATCH BOARD · MONDAY</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="db-grid">
+        <div class="db-queue"><div class="db-h">TO ASSIGN</div>
+          <div class="db-job" data-job><b data-u="j1t">Roof tear-off and reshingle</b><span data-u="j1s">Laval</span></div>
+          <div class="db-job" data-job><b data-u="j2t">Flat roof repair</b><span data-u="j2s">Verdun</span></div>
+          <div class="db-job" data-job><b data-u="j3t">Flashing and gutters</b><span data-u="j3s">Longueuil</span></div>
+        </div>
+        <div class="db-lanes">
+          <div class="db-h">WHO DOES IT</div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16.5 14.2c2.9.2 4.5 2.2 4.5 5.3"/></svg></i><div><b>YOUR OWN CREW</b><span>Your crew gets the day and the route</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:45</u></i><i data-rc="recv"><b>RECEIVED</b><u>6:47</u></i><i data-rc="acc"><b>ACCEPTED</b><u>6:52</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></i><div><b>YOUR PARTNER</b><span>A company you work with gets the job</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:46</u></i><i data-rc="recv"><b>RECEIVED</b><u>7:03</u></i><i data-rc="acc"><b>ACCEPTED</b><u>7:10</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c0-3.8 2.9-6.2 6.5-6.2s6.5 2.4 6.5 6.2"/><path d="M19 5v6M16 8h6"/></svg></i><div><b>A SUBCONTRACTOR</b><span>A crew you hire for the day receives it in the app</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:46</u></i><i data-rc="recv"><b>RECEIVED</b><u>7:12</u></i><i data-rc="acc"><b>ACCEPTED</b><u>7:30</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+        </div>
+      </div>
+      <div class="db-foot"><span class="db-sum" data-sum aria-live="polite">0 OF 3 RECEIVED</span><button type="button" class="sh-replay" data-board-replay>REPLAY THE BOARD</button></div>
+    </div>
+    <p class="dsp-note dsp-center">Built for service businesses that run their own crews and partner crews side by side.</p>
+  </div>
+</section>
+<section id="shipment" class="band-night dspsec" style="padding:6vh 0 15vh;position:relative">
+  <div class="wrap beat-inner">
+    <div class="vtabs" role="tablist" aria-label="Pick your kind of work to see the same flow for it" data-vtabs><span class="vt-l">SEE IT FOR</span><button type="button" role="tab" data-v="roofing" aria-selected="true">Roofing</button><button type="button" role="tab" data-v="construction" aria-selected="false">Construction</button><button type="button" role="tab" data-v="moving" aria-selected="false">Moving</button><button type="button" role="tab" data-v="landscaping" aria-selected="false">Landscaping</button><button type="button" role="tab" data-v="junk" aria-selected="false">Junk removal</button><button type="button" role="tab" data-v="delivery" aria-selected="false">Delivery</button><a class="vlink" data-vlink href="" hidden>See the full roofing version</a></div>
+    <div class="dsp-grid">
+    <div>
+    <div class="shipcard" data-shipment data-say="[&quot;WAITING FOR THE CREW&quot;, &quot;CREW ARRIVED · JOB SHEET SIGNED&quot;, &quot;ON THE ROOF · YOUR CREW · GPS LIVE&quot;, &quot;HANDED OFF · SUBCONTRACTOR SIGNED&quot;, &quot;ON THE JOB · SUBCONTRACTOR · GPS LIVE&quot;, &quot;FINISHED · CUSTOMER SIGNED OFF&quot;]">
+      <div class="sh-head"><span data-u="head">JOB #1041 · ROOF RESHINGLE, LAVAL</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="sh-bar"><span class="sh-status" data-status aria-live="polite">WAITING FOR THE CREW</span><span class="sh-clock" data-clock>--:--</span></div>
+      <svg class="sh-svg" viewBox="0 0 720 130" role="img" aria-label="A roofing job started by your crew, part of it handed off to a subcontractor crew and finished, tracked the whole way" data-u="aria" data-attr="aria-label">
+        <line x1="46" y1="68" x2="674" y2="68" stroke="#2B4766" stroke-width="2.5" stroke-dasharray="3 11" stroke-linecap="round"/>
+        <line data-prog x1="70" y1="68" x2="70" y2="68" stroke="#FFD100" stroke-width="3.5" stroke-linecap="round" style="filter:drop-shadow(0 0 7px rgba(255,209,0,.7))"/>
+        <g class="sh-node" data-node transform="translate(70,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-node" data-node transform="translate(385,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-node" data-node transform="translate(650,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-badge" data-badge transform="translate(70,20)"><circle r="13"/><text>1</text></g>
+        <g class="sh-badge" data-badge transform="translate(385,20)"><circle r="13"/><text>2</text></g>
+        <g class="sh-badge" data-badge transform="translate(650,20)"><circle r="13"/><text>3</text></g>
+        <text class="mk-lab" x="70" y="112">START</text><text class="mk-lab" x="385" y="112">HAND-OFF</text><text class="mk-lab" x="650" y="112">DONE</text>
+        <g class="sh-veh mk" data-a transform="translate(70,68)"><circle class="mk-ring" r="17"/><circle class="mk-core" r="8"/></g>
+        <g class="sh-veh mk pt dim" data-b transform="translate(428,68)"><circle class="mk-ring" r="17"/><circle class="mk-core" r="8"/></g>
+      </svg>
+      <ol class="sh-rows">
+        <li data-row><i class="n">1</i><div><b data-u="r1b">Crew arrives · Laval</b><span class="d" data-u="r1d">The job sheet is signed on the crew&#x27;s phone. GPS starts.</span></div><span class="t">08:22</span><span class="held" data-u="r1h">WITH: YOUR CREW</span></li>
+        <li data-row><i class="n">2</i><div><b data-u="r2b">On the roof · hours tracked</b><span class="d" data-u="r2d">Live on your map. Crew hours and materials logged to the job.</span></div><span class="t">08:22 to 11:40</span><span class="held" data-u="r2h">WITH: YOUR CREW</span></li>
+        <li data-row><i class="n">3</i><div><b data-u="r3b">Handed off · subcontractor crew</b><span class="d" data-u="r3d">The subcontractor signs for the flashing and gutters. Time and place filed.</span></div><span class="t">11:40</span><span class="held" data-u="r3h">WITH: SUBCONTRACTOR</span></li>
+        <li data-row><i class="n">4</i><div><b data-u="r4b">Finished · Laval</b><span class="d" data-u="r4d">The customer signs off. Before and after photos saved as proof of completion.</span></div><span class="t">15:05</span><span class="held" data-u="r4h">WITH: THE CUSTOMER</span></li>
+      </ol>
+      <button type="button" class="sh-replay" data-replay>REPLAY THE JOB</button>
+    </div>
+    </div>
+    <div class="dsp-copy">
+      <span class="eyebrow cool">Job tracking · the final mile</span>
+      <h2>Then watch it all the way to the final mile.</h2>
+      <p>Once your crew arrives, the job is signed on their phone and GPS tracking starts. You follow it live on your own screen. If it changes hands, that hand-off is signed and time-stamped. At the destination, the recipient signs off on delivery. Your items go all the way to where they belong, with every hand on them recorded.</p>
+      <ul class="dsp-steps">
+        <li><b>Pickup.</b> You sign off and tracking starts.</li>
+        <li><b>In transit.</b> Live on your map, every hand-off signed.</li>
+        <li><b>Delivery.</b> The recipient signs and proof of delivery is filed.</li>
+      </ul>
+      <a class="seolink" href="trucking-logistics/index.html" style="display:inline-block;margin-top:10px">dispatch and delivery tracking software</a>
+    </div>
+    </div>
+  </div>
+</section>
+<!-- UNIVERSAL-END -->
+
+
+
+
+<!-- ============================================================
+     TRADES · roofing and construction fit
+============================================================ -->
+<section id="trades" class="band-ivory on-light round-top lvsec" style="padding:15vh 0 13vh">
+  <div class="wrap beat-inner">
+    <div class="lv-top">
+      <span class="eyebrow cool">Roofing, construction and the trades</span>
+      <h2>Three roofs, two crews and a subcontractor. One screen.</h2>
+      <p>Crews on different sites, subcontractors on the specialty work, receipts for every bundle of shingles, and customers who want proof. Follow one roofing job from the first dispatch to the five-star review.</p>
+    </div>
+    <div class="story" data-story>
+      <div class="st-stage">
+        <figure class="st-slide on"><img src="assets/roof-1.webp" alt="A roofing foreman beside a work truck loaded with shingle bundles, checking the day's job on his phone at dawn" width="1200" height="797"><span class="st-time">7:10 AM</span><div class="st-ov"><div class="st-chip" style="--d:0.5s"><b>YOUR CREW · RESHINGLE · LAVAL</b><span><em>✓ ACCEPTED</em> 6:52</span></div><div class="st-chip" style="--d:1.3s"><b>SUBCONTRACTOR · FLASHING</b><span><em>✓ ACCEPTED</em> 7:10</span></div></div></figure>
+        <figure class="st-slide"><img src="assets/roof-2.webp" alt="A work truck and shingle trailer pulling into the driveway of a house getting a new roof, the crew already starting on the roof" width="1200" height="797" loading="lazy"><i class="st-geo"></i><span class="st-time">7:48 AM</span><div class="st-ov"><div class="st-chip" style="--d:0.6s"><b>ARRIVAL STAMPED 7:48</b><span>Job sheet signed. GPS live.</span></div></div></figure>
+        <figure class="st-slide"><img src="assets/roof-3.webp" alt="Three roofers installing asphalt shingles on a pitched roof with a ladder against the eaves" width="1200" height="797" loading="lazy"><span class="st-time">10:30 AM</span><div class="st-ov"><div class="st-chip" style="--d:0.5s"><b>3 CLOCKED IN</b><span>Crew hours land on the job</span></div><div class="st-chip" style="--d:1.3s"><b>SHINGLES · $1,260</b><span><em>RECEIPT FILED</em> to the job</span></div></div></figure>
+        <figure class="st-slide"><img src="assets/roof-4.webp" alt="A foreman holding a phone out while the homeowner signs the sign-off on the screen at the front door" width="1200" height="797" loading="lazy"><span class="st-time">1:30 PM</span><div class="st-ov"><div class="st-chip" style="--d:0.5s"><b>SIGN-OFF SIGNED · 1:30 PM</b><span>Filed to the job</span></div><div class="st-chip" style="--d:1.3s"><b>NO SIGNAL · SAVED ON THE PHONE</b><span>Syncs the moment it reconnects</span></div></div></figure>
+        <figure class="st-slide"><img src="assets/roof-5.webp" alt="A freshly finished gray shingle roof with a straight ridge line in late afternoon light, a ladder being lowered at the side" width="1200" height="797" loading="lazy"><span class="st-time">3:05 PM</span><div class="st-ov"><div class="st-chip" style="--d:0.5s"><b>BEFORE 8:02 AM · AFTER 3:05 PM</b><span><em>FILED</em> with the time and the place</span></div></div></figure>
+        <figure class="st-slide"><img src="assets/roof-6.webp" alt="A homeowner on the lawn looking happily at their phone with a newly roofed house behind them" width="1200" height="797" loading="lazy"><span class="st-time">4:40 PM</span><div class="st-ov"><div class="st-chip" style="--d:0.5s"><b>$1,840 PAID IN THE APP · 4:41 PM</b><span>Invoice sent from the job</span></div><div class="st-chip" style="--d:1.3s"><b>★★★★★ REVIEW REQUEST SENT · 4:55 PM</b><span>Right after the job is done</span></div></div></figure>
+      </div>
+      <ol class="st-list" aria-label="One roofing job, start to finish">
+      <li class="on"><button type="button" aria-current="true"><i>1</i><span class="st-t">7:10 AM</span><b>Dispatched</b><span class="st-d">The job goes to your crew and the flashing goes to a sub. Both accept, with the time.</span></button><span class="st-bar"></span></li>
+      <li><button type="button" aria-current="false"><i>2</i><span class="st-t">7:48 AM</span><b>Arrived</b><span class="st-d">The geofence stamps the arrival on its own. Nobody has to call.</span></button><span class="st-bar"></span></li>
+      <li><button type="button" aria-current="false"><i>3</i><span class="st-t">10:30 AM</span><b>On the roof</b><span class="st-d">Crew hours and every receipt land on the job's real cost.</span></button><span class="st-bar"></span></li>
+      <li><button type="button" aria-current="false"><i>4</i><span class="st-t">1:30 PM</span><b>Signed</b><span class="st-d">The sign-off is signed on the phone, even with no signal.</span></button><span class="st-bar"></span></li>
+      <li><button type="button" aria-current="false"><i>5</i><span class="st-t">3:05 PM</span><b>Proof</b><span class="st-d">Before and after photos, filed with the time and the place.</span></button><span class="st-bar"></span></li>
+      <li><button type="button" aria-current="false"><i>6</i><span class="st-t">4:40 PM</span><b>Paid, then reviewed</b><span class="st-d">The customer pays in the app, and the review request follows.</span></button><span class="st-bar"></span></li>
+      </ol>
+    </div>
+    <p class="fit-note">The same fit works for electricians, plumbers, HVAC, painters and any crew that works at the customer's site.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 2 · THE MORPHING TIMELINE (pinned scrub)
+============================================================ -->
+<section id="timeline" class="band-night">
+  <div class="stage">
+    <div class="pool"></div>
+    <div class="beat-inner">
+      <div class="tl-head wrap">
+        <span class="eyebrow cool">Built for any crew · fully customizable</span>
+        <h2>It works the way your trade works.</h2>
+        <p class="tl-sub">You name the steps of your job and choose what each one needs: a photo, a signature, a payment. CrewFinding stamps the time and files the proof on its own — watch the same timeline run a move, a delivery route, and a day of lawns.</p>
+        <div class="tilt-hint" aria-hidden="true">📱 Tilt your phone sideways to watch the truck drive the route</div>
+      </div>
+
+      <div class="tl-figure">
+        <svg id="tlsvg" class="ph-a" viewBox="0 0 1200 260">
+          <defs>
+            <mask id="truckfeather" maskContentUnits="objectBoundingBox">
+              <radialGradient id="tfg">
+                <stop offset="52%" stop-color="#fff"/>
+                <stop offset="92%" stop-color="#000"/>
+              </radialGradient>
+              <circle cx=".5" cy=".5" r=".5" fill="url(#tfg)"/>
+            </mask>
+            <linearGradient id="lawng" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17482C"/><stop offset="1" stop-color="#0F3520"/></linearGradient>
+            <pattern id="mowp" width="44" height="52" patternUnits="userSpaceOnUse" patternTransform="skewX(-24)"><rect width="22" height="52" fill="#1D5A36" opacity=".55"/></pattern>
+            <linearGradient id="roadg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E2540"/><stop offset="1" stop-color="#091A2F"/></linearGradient>
+            <linearGradient id="beamg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFE27A" stop-opacity=".75"/><stop offset="1" stop-color="#FFD100" stop-opacity="0"/></linearGradient>
+            <linearGradient id="trailg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFD100" stop-opacity="0"/><stop offset="1" stop-color="#FFD100" stop-opacity=".45"/></linearGradient>
+          </defs>
+          <rect class="road" x="46" y="114" width="1108" height="52" rx="26"/>
+          <g class="lawn"><rect x="46" y="110" width="1108" height="60" rx="26" fill="url(#lawng)" stroke="#256B42" stroke-width="1.5"/><rect x="46" y="110" width="1108" height="60" rx="26" fill="url(#mowp)"/><line x1="70" y1="111" x2="1130" y2="111" stroke="#2F8450" stroke-width="3.5" stroke-dasharray="2 4" stroke-linecap="round" opacity=".7"/><line x1="70" y1="169" x2="1130" y2="169" stroke="#2F8450" stroke-width="3.5" stroke-dasharray="2 4" stroke-linecap="round" opacity=".7"/></g>
+          <line class="road-edge" x1="72" y1="114" x2="1128" y2="114"/>
+          <line class="road-edge" x1="72" y1="166" x2="1128" y2="166"/>
+          <line class="tl-line" x1="80" y1="140" x2="1120" y2="140"/>
+          <line id="tlprogress" x1="80" y1="140" x2="80" y2="140"/>
+          <!-- phase A: named legs with their times, so you see where the day goes -->
+          <g class="a-only">
+            <text class="seg" x="253" y="188" text-anchor="middle">drive 0:35</text>
+            <text class="seg hot" x="513" y="188" text-anchor="middle">load 2:10</text>
+            <text class="seg" x="686" y="188" text-anchor="middle">drive 0:48</text>
+            <text class="seg hot" x="946" y="188" text-anchor="middle">offload 1:35</text>
+          </g>
+          <g class="node end na" transform="translate(80,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:38</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">8:04</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji a-only" x="0" y="-60" text-anchor="middle">🚚</text>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏠</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">Verdun</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$70 − $28</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$42</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Beaconsfield</text>
+            <g class="a-only"><text class="alabel" x="0" y="-34" text-anchor="middle">LEAVE SHOP</text><text class="asub" x="0" y="72" text-anchor="middle">Dorval</text></g>
+          </g>
+          <g class="node mid" transform="translate(253,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:42</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">8:31</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏢</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">LaSalle</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$85 − $31</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$54</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Kirkland</text>
+          </g>
+          <g class="node mid na" transform="translate(426,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:35</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">8:57</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji a-only" x="0" y="-60" text-anchor="middle">🏠</text>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏠</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">NDG</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$60 − $26</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$34</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">DDO</text>
+            <g class="a-only"><text class="alabel" x="0" y="-34" text-anchor="middle">AT CLIENT</text><text class="asub" x="0" y="72" text-anchor="middle">Lachine</text></g>
+          </g>
+          <g class="node mid na" transform="translate(600,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 1:04</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">9:26</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji a-only" x="0" y="-60" text-anchor="middle">📦</text>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏬</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">Plateau</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$45 − $47</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#FF4438">−$2</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Pointe-Claire</text>
+            <g class="a-only"><text class="alabel" x="0" y="-34" text-anchor="middle">LOADED</text><text class="asub" x="0" y="72" text-anchor="middle">46 boxes on board</text></g>
+          </g>
+          <g class="node mid na" transform="translate(773,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:47</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">9:58</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji a-only" x="0" y="-60" text-anchor="middle">🏡</text>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏠</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">Rosemont</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$75 − $34</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$41</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Dorval</text>
+            <g class="a-only"><text class="alabel" x="0" y="-34" text-anchor="middle">AT NEW HOME</text><text class="asub" x="0" y="72" text-anchor="middle">Brossard</text></g>
+          </g>
+          <g class="node mid" transform="translate(946,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:51</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">10:24</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏘️</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">Anjou</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$90 − $37</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$53</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Lachine</text>
+          </g>
+          <g class="node end na" transform="translate(1120,140)">
+            <circle class="ring r1" r="12"/><circle class="ring r2" r="12"/><circle class="dot" r="11"/><rect class="yard" x="-20" y="-20" width="40" height="40" rx="9"/>
+            <g class="chk"><path d="M-5,0.5 l3.5,3.5 7,-7.5" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="yardtime" x="0" y="-34" text-anchor="middle">⏱ 0:33</text>
+            <text class="stoptime" x="0" y="-34" text-anchor="middle">10:51</text>
+            <g class="proofrow" transform="translate(0,56)"><g transform="translate(-26,0)"><g class="pf pf1"><circle r="10"/><text text-anchor="middle" y="4">📷</text></g></g><g><g class="pf pf2"><circle r="10"/><text text-anchor="middle" y="4">✍️</text></g></g><g transform="translate(26,0)"><g class="pf pf3"><circle r="10"/><text text-anchor="middle" y="4">$</text></g></g></g>
+            <text class="ph-emoji a-only" x="0" y="-60" text-anchor="middle">🧾</text>
+            <text class="ph-emoji b-only" x="0" y="-60" text-anchor="middle">🏢</text>
+            <text class="ph-emoji c-only" x="0" y="-60" text-anchor="middle">🌳</text>
+            <text class="bsub b-only" x="0" y="84" text-anchor="middle">Longueuil</text>
+            <text class="cprice c-only" x="0" y="52" text-anchor="middle">$55 − $24</text>
+            <text class="ckept c-only" x="0" y="70" text-anchor="middle" fill="#2EE86C">+$31</text>
+            <text class="csub c-only" x="0" y="86" text-anchor="middle">Verdun</text>
+            <g class="a-only"><text class="alabel" x="0" y="-34" text-anchor="middle">DONE · PAID</text><text class="asub" x="0" y="72" text-anchor="middle">$1,840 collected</text></g>
+          </g>
+          <!-- ghost node: the "add your own step" affordance -->
+          <g class="ghostnode" transform="translate(1182,140)">
+            <circle r="11" fill="none" stroke="#44607F" stroke-width="2" stroke-dasharray="4 5"/>
+            <path d="M-4,0 H4 M0,-4 V4" stroke="#9DB1CC" stroke-width="2" stroke-linecap="round"/>
+            <text x="0" y="34" text-anchor="middle" style="font-family:var(--data);font-weight:700;font-size:10px;fill:var(--fg-mute);letter-spacing:.1em">ADD A STEP</text>
+          </g>
+          <g id="tlmarker" transform="translate(80,140)">
+            <g id="tlsway">
+              <rect id="tltrail" x="-38" y="-13" width="0" height="26" rx="13" fill="url(#trailg)"/>
+              <path id="tlbeam" d="M34,-11 L160,-40 L160,40 L34,11 Z" fill="url(#beamg)"/>
+              <g transform="rotate(90)"><image id="tlveh" href="assets/truck-mover.webp" x="-14" y="-32" width="28" height="64"/></g>
+              <g id="tltail"><rect x="-43" y="-15" width="4" height="9" rx="2" fill="#FFE27A"/><rect x="-43" y="6" width="4" height="9" rx="2" fill="#FFE27A"/></g>
+            </g>
+          </g>
+        </svg>
+        <div class="tl-hud" aria-hidden="true">
+          <div class="hud-cell"><span class="hud-k">NOW</span><span class="hud-v live" id="hudnow">LEAVE SHOP</span></div>
+          <div class="hud-cell"><span class="hud-k">CLOCK</span><span class="hud-v" id="hudclock">7:40</span></div>
+          <div class="hud-cell"><span class="hud-k">PROOF FILED</span><span class="hud-v" id="hudfiled">0</span></div>
+          <div class="hud-cell"><span class="hud-k" id="hudk4">COLLECTED</span><span class="hud-v" id="hudv4">$0</span></div>
+        </div>
+      </div>
+
+      <div class="tl-copies wrap">
+        <div class="tl-copy on" data-ph="a">
+          <h3>Moving day, from shop to paid</h3>
+          <p>Drive out, load, drive, offload, collect. Every leg is timed on its own, so you and the client both see exactly which part of the day took the longest.</p>
+          <a class="seolink" href="moving/index.html">moving company software</a>
+        </div>
+        <div class="tl-copy" data-ph="b">
+          <h3>The same line becomes a delivery route</h3>
+          <p>Seven drops from Verdun to Longueuil in one afternoon. Every door gets its photo, its signature and its payment, stamped with the minute it happened. No clipboard.</p>
+          <a class="seolink" href="/delivery">last mile delivery tracking</a>
+        </div>
+        <div class="tl-copy" data-ph="c">
+          <h3>Same crew, now it's seven lawns</h3>
+          <p>Seven lawns, seven prices, the crew clock running at every one — and a photo of each finished yard filed as proof. Each yard shows its price minus the crew time it burned: Kirkland kept $54, Pointe-Claire lost $2. Now you know which lawns to requote.</p>
+          <a class="seolink" href="landscaping/index.html">landscaping crew software</a>
+        </div>
+      </div>
+      <div class="tl-dots"><i class="on"></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 3 · DOCUMENTS FILE THEMSELVES
+============================================================ -->
+<section id="filed" class="band-night">
+  <div class="pool"></div>
+  <div class="wrap filedgrid beat-inner">
+    <div class="beatcopy">
+      <span class="eyebrow cool">E-sign + auto filing</span>
+      <h2>Signed on site. Filed before the truck door closes.</h2>
+      <p>The client signs the contract and the job sheet on your crew's phone, and the job file saves itself. No glovebox paper to lose, no signature to chase, no argument about who agreed to what. Every document is filed the second it's signed — and it stays filed, whether that's one move or thirty-one deliveries a day.</p>
+      <div class="manifest" id="manifest">
+        <div class="mrow" data-doc="0"><span><b>Contract</b></span><span class="st">✓ signed 08:22</span></div>
+        <div class="mrow" data-doc="1"><span><b>Bill of lading</b></span><span class="st">✓ signed 08:24</span></div>
+        <div class="mrow" data-doc="2"><span><b>Damage waiver</b></span><span class="st">✓ signed 08:25</span></div>
+        <div class="mrow" data-doc="3"><span><b>Invoice #2214</b></span><span class="st">✓ paid 16:40</span></div>
+      </div>
+      <span class="filedchip num" id="filedchip">JOB #2214 · ALL FILED</span>
+      <div class="daystrip" id="daystrip">
+        <div class="dayhead">ONE JOB OR THIRTY · SAME FILING</div>
+        <div class="daycount">Tuesday's delivery route: <b id="dstops">0</b> stops · <b id="dsigs">0</b> signatures · <b id="dfiles">0</b> files</div>
+        <span class="dayzero num">PAPERS LOST: 0</span>
+      </div>
+      <a class="seolink" href="/e-sign" style="display:inline-block;margin-top:26px">e-signatures for field crews</a>
+    </div>
+    <div class="dossier" id="dossier" aria-label="Signed job documents filed in the CrewFinding app, on the crew's phone">
+      <img class="d-doc" src="assets/doc-contract.webp" alt="Signed contract" style="--dx:-166px;--dr:-13deg;--dd:0s">
+      <img class="d-doc" src="assets/doc-bol.webp" alt="Signed bill of lading" style="--dx:-56px;--dr:-5deg;--dd:.5s">
+      <img class="d-doc" src="assets/doc-waiver.webp" alt="Signed damage waiver" style="--dx:56px;--dr:5deg;--dd:1s">
+      <img class="d-doc" src="assets/doc-invoice.webp" alt="Paid invoice" style="--dx:166px;--dr:13deg;--dd:1.5s">
+      <img class="d-phone" src="assets/phone-jobfile.webp" alt="CrewFinding app on a phone showing the job 2214 file">
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LIVE FEATURES · quote to paid, the door, anywhere, the books. Each card plays on scroll.
+============================================================ -->
+<section id="cash" class="band-ivory on-light round-top lvsec" style="padding:15vh 0 12vh">
+  <div class="wrap dsp-grid beat-inner">
+    <div class="dsp-copy">
+      <span class="eyebrow cool">Quotes · invoicing · payments</span>
+      <h2>Quote it Monday. Get paid Thursday. Type it once.</h2>
+      <p>The estimate you build in the app becomes the job. The job becomes the invoice. The client pays in the same app. One record from the first yes to the money landing, with the time on every step.</p>
+      <ul class="dsp-steps">
+        <li><b>Quote.</b> Build the estimate on your phone and send it.</li>
+        <li><b>Book.</b> The yes lands on the schedule with the crew and the day.</li>
+        <li><b>Collect.</b> Invoice from the job and take the payment in the app.</li>
+      </ul>
+      <a class="seolink" href="/payments">payment collection for service crews</a>
+    </div>
+    <div class="lvcard" data-live>
+      <div class="sh-head"><span>JOB #2290 · 3-BEDROOM MOVE</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="lv-bar"><span class="lv-status" data-lstatus data-init="DRAFT ESTIMATE">DRAFT ESTIMATE</span><span class="lv-collect">COLLECTED<b data-at="6.2" data-num="1840" data-pre="$">$0</b></span></div>
+      <ol class="sh-rows">
+        <li data-at=".6" data-say="ESTIMATE SENT"><i class="n">1</i><div><b>Estimate sent to the client</b><span class="d">A 3-bedroom move, built in the app</span></div><span class="t">Mon 1:58 PM</span></li>
+        <li data-at="2" data-say="ACCEPTED BY THE CLIENT"><i class="n">2</i><div><b>Client taps accept</b><span class="d">No retyping. The estimate becomes the job.</span></div><span class="t">Mon 2:15 PM</span></li>
+        <li data-at="3.4" data-say="ON THE SCHEDULE"><i class="n">3</i><div><b>On Thursday's schedule</b><span class="d">Crew and truck assigned</span></div><span class="t">Mon 2:16 PM</span></li>
+        <li data-at="4.8" data-say="INVOICE SENT"><i class="n">4</i><div><b>Invoice sent from the job</b><span class="d">The crew wraps in Brossard</span></div><span class="t">Thu 4:40 PM</span></li>
+        <li data-at="6.2" data-say="PAID"><i class="n">5</i><div><b>Paid in the app<em class="lv-stamp" data-at="6.5">PAID</em></b><span class="d">The client pays on site</span></div><span class="t">Thu 4:41 PM</span></li>
+      </ol>
+      <div class="lv-foot"><span class="lv-note">One job file, start to finish</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="door" class="band-night lvsec" style="padding:15vh 0 13vh">
+  <div class="wrap beat-inner">
+    <div class="lv-top">
+      <span class="eyebrow cool">Client notifications · job photos</span>
+      <h2>The client knows you're coming. The photos prove you came.</h2>
+      <p>Before the crew arrives, the client gets the heads-up. Before the crew leaves, the proof of the work is on the job, with the time and the place.</p>
+    </div>
+    <div class="lv-grid">
+      <div>
+        <div class="lvcard" data-live>
+          <div class="sh-head"><span>THE CLIENT'S PHONE · 7:52 AM</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="lv-bar"><span class="lv-status" data-lstatus data-init="CREW LEAVING THE LAST JOB">CREW LEAVING THE LAST JOB</span></div>
+          <div class="nt-banner" data-at=".6" data-say="CLIENT NOTIFIED · 7:52">
+            <span class="nt-ico"><svg viewBox="0 0 24 24" fill="#0B1F3A" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+            <div><b>Your crew is on the way</b><span>8 minutes out</span></div><em>now</em>
+          </div>
+          <div class="nt-route" data-at="1.6">
+            <img class="nt-truck" data-at="1.6" src="assets/fleet-mover.webp" alt="" width="84" height="36">
+            <svg class="nt-house" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD100" d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z" style="filter:drop-shadow(0 0 5px rgba(255,209,0,.7))"/></svg>
+            <span class="nt-eta">8 MIN OUT</span>
+            <span class="nt-arr lv-r" data-at="5.8" data-say="CREW ARRIVED · 8:04">ARRIVAL STAMPED 8:04</span>
+          </div>
+          <div class="lv-foot"><span class="lv-note">No more "where are you?" calls</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Client notifications</h3>
+          <p>When the crew heads to the job, the client gets a "your crew is on the way" message before anyone knocks.</p>
+          <p class="ben">No more "where are you?" calls from the truck.</p>
+        </div>
+      </div>
+      <div>
+        <div class="lvcard" data-live>
+          <div class="sh-head"><span>JOB #2214 · PHOTOS</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="lv-bar"><span class="lv-status" data-lstatus data-init="BEFORE PHOTO FILED · 11:02 AM">BEFORE PHOTO FILED · 11:02 AM</span></div>
+          <div class="ph-wrap">
+            <img src="assets/photo-before.webp" alt="A cluttered garage packed with boxes, a mattress, bags and old furniture, the before photo" width="800" height="600" loading="lazy">
+            <img class="ph-after" data-at="1.2" src="assets/photo-after.webp" alt="The same garage emptied and swept clean, the after photo" width="800" height="600" loading="lazy">
+            <i class="ph-line" data-at="1.2"></i>
+            <span class="ph-tag b">BEFORE · 11:02 AM</span>
+            <span class="ph-tag a lv-r" data-at="3.2" data-say="AFTER PHOTO TAKEN · 3:05 PM">AFTER · 3:05 PM</span>
+            <span class="ph-file lv-r" data-at="3.9" data-say="FILED TO THE JOB"><span>FILED TO JOB #2214</span><span>3:05 PM · DORVAL</span></span>
+          </div>
+          <div class="lv-foot"><span class="lv-note">Time and place on every photo</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Job photos</h3>
+          <p>Crews snap before and after photos on the job. Each one is filed to the job with the time and the place.</p>
+          <p class="ben">The proof that the work was done, and done right.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="anywhere" class="band-ivory on-light round-top lvsec" style="padding:15vh 0 12vh">
+  <div class="wrap beat-inner">
+    <div class="lv-top">
+      <span class="eyebrow cool">Works offline · any language</span>
+      <h2>No signal? Still signed. Another language? Same job.</h2>
+      <p>Crews work in basements and dead zones, and they think in more than one language. The app keeps up with both.</p>
+    </div>
+    <div class="lv-grid">
+      <div>
+        <div class="lvcard" data-live>
+          <div class="sh-head"><span>JOB #2214 · BASEMENT UNIT</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="of-top">
+            <span class="lv-status" data-lstatus data-init="ONLINE">ONLINE</span>
+            <div class="of-net">
+              <span data-at="0" data-until="1.2"><span class="of-bars"><i></i><i></i><i></i><i></i></span>ONLINE</span>
+              <span class="off" data-at="1.2" data-until="6.2" data-say="NO SIGNAL · BASEMENT"><span class="of-bars"><i></i><i></i><i></i><i></i></span>NO SIGNAL</span>
+              <span data-at="6.2" data-say="SIGNAL BACK · SYNCING"><span class="of-bars"><i></i><i></i><i></i><i></i></span>ONLINE</span>
+            </div>
+          </div>
+          <div class="of-doc">
+            <b>Bill of lading · client signature</b><span class="sub">Signed on the phone, no bars</span>
+            <svg class="of-sig" viewBox="0 0 300 64" aria-hidden="true"><path pathLength="100" data-at="2" data-say="CLIENT SIGNING" d="M12 44 C 26 8, 40 8, 38 34 S 52 54, 66 26 S 84 14, 92 40 S 120 50, 138 22 C 150 6, 160 30, 176 40 S 214 44, 232 24 S 262 22, 286 38"/></svg>
+            <div class="of-meta"><span class="lv-r" data-at="3.6" data-say="SIGNED · SAVED ON THE PHONE">SIGNED 1:30 PM</span><span>CLIENT SIGNATURE</span></div>
+          </div>
+          <div class="of-state">
+            <span class="of-chip" data-at="3.9" data-until="6.4">1 WAITING TO SYNC</span>
+            <span class="of-chip sync" data-at="6.8" data-say="SYNCED · FILED TO THE JOB">SYNCED 1:42 PM · FILED TO THE JOB</span>
+          </div>
+          <div class="lv-foot"><span class="lv-note">Files itself when the signal returns</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Works offline</h3>
+          <p>Crews keep clocking in, signing and snapping photos with no signal. Everything syncs the moment the phone reconnects.</p>
+          <p class="ben">A dead zone never costs you a signature.</p>
+        </div>
+      </div>
+      <div>
+        <div class="lvcard" data-lang>
+          <div class="sh-head"><span>THE SAME JOB · TWO LANGUAGES</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="lg-cols">
+            <div class="lg-col">
+              <div class="lg-who">OWNER · ENGLISH</div>
+              <ul class="lg-list"><li><span>Start the job</span></li><li><span>Get the signature</span></li><li><span>Take the after photo</span></li><li><span>Job total</span><i>$1,840</i></li></ul>
+            </div>
+            <div class="lg-col fm">
+              <div class="lg-who" data-lgwho>FOREMAN · PORTUGUÊS</div>
+              <ul class="lg-list" data-lglist><li><span>Começar o trabalho</span></li><li><span>Colher a assinatura</span></li><li><span>Tirar a foto do depois</span></li><li><span>Total do trabalho</span><i>$1,840</i></li></ul>
+            </div>
+          </div>
+          <div class="lg-chips"><i data-lg class="on">Português</i><i data-lg>Español</i><i data-lg>Français</i><i data-lg>Polski</i><i class="more">+ any language you need</i></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Any language</h3>
+          <p>The app speaks your crew's language, whichever one it is.</p>
+          <p class="ben">Everyone on the crew understands every step.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="books" class="band-night lvsec" style="padding:15vh 0 13vh">
+  <div class="wrap beat-inner">
+    <div class="lv-top">
+      <span class="eyebrow cool">Timesheets · truck costs · customer history</span>
+      <h2>The numbers behind every job, kept while the crew works.</h2>
+      <p>Hours, truck costs and every past job for every client file themselves as the work happens, so nobody rebuilds them from memory on a Sunday night.</p>
+    </div>
+    <div class="lv-grid three">
+      <div>
+        <div class="lvcard sm" data-live>
+          <div class="sh-head"><span>WEEK ENDING FRIDAY · 4:30 PM</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="lv-bar"><span class="lv-status" data-lstatus data-init="CLOCKED HOURS, PER JOB">CLOCKED HOURS, PER JOB</span></div>
+          <div class="ts-row" data-at=".6"><b>Marc</b><span class="ts-bar" style="--w:94%"><i></i></span><u data-at=".6" data-num="42.5" data-dec="1" data-suf=" h">0.0 h</u></div>
+          <div class="ts-row" data-at="1.4"><b>Dave</b><span class="ts-bar" style="--w:87%"><i></i></span><u data-at="1.4" data-num="39" data-dec="1" data-suf=" h">0.0 h</u></div>
+          <div class="ts-row" data-at="2.2"><b>Sam</b><span class="ts-bar" style="--w:91%"><i></i></span><u data-at="2.2" data-num="41" data-dec="1" data-suf=" h">0.0 h</u></div>
+          <div class="ts-total"><span>WEEK TOTAL</span><b data-at="3.4" data-num="122.5" data-dec="1" data-suf=" h">0.0 h</b></div>
+          <div class="lv-foot"><span class="lv-stamp" data-at="4.4" data-say="READY WHEN YOU RUN PAYROLL" style="margin-left:0">READY FOR PAYROLL</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Crew timesheets</h3>
+          <p>Every worker's hours, clocked per job and totaled for the week, ready when you run payroll.</p>
+          <p class="ben">Run payroll from real numbers, not memory.</p>
+          <a class="seolink" href="/timesheets">crew timesheets</a>
+        </div>
+      </div>
+      <div>
+        <div class="lvcard sm" data-live>
+          <div class="sh-head"><span>TRUCK 2 · COSTS THIS MONTH</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="tc-truck"><img src="assets/fleet-mover.webp" alt="" width="104" height="45"><div><b>Truck 2</b><span>Box truck</span></div></div>
+          <div class="lv-bar"><span class="lv-status" data-lstatus data-init="NOTHING LOGGED YET">NOTHING LOGGED YET</span></div>
+          <div class="tc-row lv-r" data-at=".7" data-say="FUEL LOGGED"><div><b>Fuel<em class="tc-tag">RECEIPT</em></b><span>6 fills, receipts attached</span></div><u>$412</u></div>
+          <div class="tc-row lv-r" data-at="1.7" data-say="SERVICING LOGGED"><div><b>Oil change and servicing</b><span>Logged by the driver</span></div><u>$118</u></div>
+          <div class="tc-row lv-r" data-at="2.7" data-say="BRAKE JOB LOGGED"><div><b>Brake job<em class="tc-tag">RECEIPT</em></b><span>Shop invoice, photo filed</span></div><u>$640</u></div>
+          <div class="ts-total"><span>WHAT TRUCK 2 REALLY COSTS</span><b data-at="3.8" data-say="ON THE TRUCK'S COST LINE" data-num="1170" data-pre="$">$0</b></div>
+          <div class="lv-foot"><span class="lv-note">Not in a pile in the glovebox</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Truck costs and maintenance</h3>
+          <p>Log fuel, repairs and servicing as expenses against each truck, with the receipt photo.</p>
+          <p class="ben">You see what each truck really costs to keep running.</p>
+        </div>
+      </div>
+      <div>
+        <div class="lvcard sm" data-live>
+          <div class="sh-head"><span>CLIENT FILE · BROSSARD</span><span class="sh-live"><i></i>LIVE</span></div>
+          <div class="ch-who"><i class="ch-av">R</i><div><b>Repeat client</b><span>Just called you back</span></div></div>
+          <div class="lv-bar"><span class="lv-status" data-lstatus data-init="OPENING THE FILE">OPENING THE FILE</span></div>
+          <ul class="ch-list">
+            <li data-at=".7" data-say="NOV 2025 · MOVE"><b>Move, 2 bedrooms<u>$1,420</u></b><span>Nov 2025 · paid</span></li>
+            <li data-at="1.7" data-say="MAR 2026 · JUNK REMOVAL"><b>Junk removal<u>$380</u></b><span>Mar 2026 · paid · photos filed</span></li>
+            <li data-at="2.7" data-say="AUG 2026 · MOVE"><b>Move, 3 bedrooms<u>$1,250</u></b><span>Aug 2026 · paid · waiver signed</span></li>
+          </ul>
+          <div class="ch-chips"><i class="lv-r" data-at="3.6">3 JOBS</i><i class="lv-r" data-at="3.8">ALL PAID</i><i class="lv-r" data-at="4" data-say="ANSWERED IN 10 SECONDS">1 SIGNED WAIVER</i></div>
+          <div class="lv-foot"><span class="lv-note">Know the client before you call back</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+        </div>
+        <div class="lv-cap">
+          <h3>Customer history</h3>
+          <p>Every client with every past job, quote, signed document and photo in one place.</p>
+          <p class="ben">You know the customer before you call them back.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="reviews" class="band-ivory on-light round-top lvsec" style="padding:15vh 0 12vh">
+  <div class="wrap dsp-grid beat-inner">
+    <div class="lvcard" data-live>
+      <div class="sh-head"><span>AFTER THE JOB · JOB #2214</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="lv-bar"><span class="lv-status" data-lstatus data-init="JOB DONE · CUSTOMER SIGNED OFF">JOB DONE · CUSTOMER SIGNED OFF</span></div>
+      <div class="rv-msg lv-r" data-at=".6" data-say="REVIEW REQUEST SENT · 3:20 PM">
+        <small>FROM YOUR COMPANY · 3:20 PM</small>
+        <b>Thanks for choosing us! How did the crew do?</b>
+        <span class="rv-btn">Leave a review</span>
+      </div>
+      <div class="rv-stars" aria-hidden="true"><i data-at="2">★</i><i data-at="2.3">★</i><i data-at="2.6">★</i><i data-at="2.9">★</i><i data-at="3.2" data-say="CUSTOMER TAPPED 5 STARS">★</i></div>
+      <div class="rv-card lv-r" data-at="4.2" data-say="5-STAR REVIEW IN · 3:31 PM">
+        <span class="st" aria-hidden="true">★★★★★</span>
+        <q>The crew showed up on time and left the garage spotless. Would hire again.</q>
+        <div class="rv-meta"><span>JOB #2214 · BROSSARD</span><em class="lv-stamp" data-at="4.9">NEW REVIEW</em></div>
+      </div>
+      <div class="lv-foot"><span class="lv-note">Every good review helps win the next job</span><button type="button" class="sh-replay" data-lreplay>REPLAY</button></div>
+    </div>
+    <div class="dsp-copy">
+      <span class="eyebrow cool">Customer reviews</span>
+      <h2>The job is done. Now it grows your business.</h2>
+      <p>After the job, the customer gets a review request. They say it while the finished work is still in front of them, and every good review builds the reputation that brings in your next job.</p>
+      <ul class="dsp-steps">
+        <li><b>Finish.</b> The customer signs off on the job.</li>
+        <li><b>Ask.</b> A review request goes out after the job, so nobody has to remember.</li>
+        <li><b>Grow.</b> Good reviews win you more work.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 4 · MICRO EXPENSES LAND ON THE JOB
+============================================================ -->
+<section id="costs" class="band-night">
+  <div class="pool"></div>
+  <div class="wrap costgrid beat-inner">
+    <div class="stormwrap">
+      <img class="storm" id="storm" src="assets/costs-scan.webp" alt="A phone scanning a $58 Petro-Canada fuel receipt that files itself to job 2214">
+    </div>
+    <div class="beatcopy">
+      <span class="eyebrow cool">Where the money goes</span>
+      <h2>The job billed $1,840. Now watch what it really cost.</h2>
+      <p>This is the job file for one Tuesday move, Lachine to Brossard. Marc, Dave and Sam clocked 8.5 tracked hours each, and the fuel receipt got snapped at the pump. Every one of those dollars pins itself to this job while it happens, not in a month-end mystery pile.</p>
+      <div class="ledger" id="ledger" aria-label="Job cost ledger">
+        <div class="lhead"><span>JOB #2214 · 3-BEDROOM MOVE · LACHINE TO BROSSARD</span><span class="livepill"><i></i>LIVE</span></div>
+        <div class="billbar" aria-hidden="true"><div class="bb-track" id="bbtrack"><i class="bb-seg" data-w="11.09"></i><i class="bb-seg" data-w="11.09"></i><i class="bb-seg" data-w="11.09"></i><i class="bb-seg s4" data-w="3.15"></i><i class="bb-rest" id="bbrest">?</i></div><div class="bb-cap num"><span>$1,840 BILLED</span><span id="bbcap">COSTS SO FAR <b>0%</b></span></div></div>
+        <div class="lrow billed" data-n="1840" data-sign=""><span>💵 Billed to the client</span><span class="amt num">$1,840.00</span></div>
+        <div class="lrow" data-n="204" data-sign="−"><span>👷 Marc · 8.5 h × $24</span><span class="amt num">−$204.00</span></div>
+        <div class="lrow" data-n="204" data-sign="−"><span>👷 Dave · 8.5 h × $24</span><span class="amt num">−$204.00</span></div>
+        <div class="lrow" data-n="204" data-sign="−"><span>👷 Sam · 8.5 h × $24</span><span class="amt num">−$204.00</span></div>
+        <div class="lrow" data-n="58" data-sign="−"><span>⛽ Fuel · Petro-Canada Dorval<b class="stamp" id="fuelstamp">RECEIPT FILED</b></span><span class="amt num">−$58.00</span></div>
+        <div class="ltotal"><span>RUNNING THIS JOB COST</span><span class="amt num" id="costtotal">$0.00</span></div>
+        <div class="lteaser num">$1,840 billed − $670 costs · what's left? keep scrolling ↓</div>
+      </div>
+      <a class="seolink" href="/job-costing" style="display:inline-block;margin-top:24px">job costing for service crews</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 5 · AI: ASK YOUR NUMBERS ANYTHING
+============================================================ -->
+<section id="ai" class="band-night">
+  <div class="pool"></div>
+  <div class="wrap aigrid beat-inner">
+    <div class="beatcopy">
+      <span class="eyebrow cool">AI insights</span>
+      <h2>Ask your numbers anything.</h2>
+      <p>Every job you track becomes an answer you can ask for. Which clients pay best. Which truck costs the most to run. Which crew finishes fastest. You ask in plain words, and it answers from your own jobs — no spreadsheet, no formulas, no accountant. And the next time you quote, you price it off what the last job really took.</p>
+      <a class="seolink" href="/ai-insights">AI job profit insights</a>
+    </div>
+    <div class="aiwrap">
+      <img class="ai-orb" src="assets/ai-orb-charts.webp" alt="" aria-hidden="true">
+      <div class="aiphone" id="aicard">
+        <div class="ainotch" aria-hidden="true"></div>
+        <div class="q num"><span id="typed"></span><span class="cursor"></span></div>
+        <div class="a" id="aians">
+          <div class="arow"><span>1 · Office move, Griffintown</span><span class="kept">$2,410 kept</span></div>
+          <div class="arow"><span>2 · Repeat client, Westmount</span><span class="kept">$1,380 kept</span></div>
+          <div class="arow"><span>3 · Tuesday move, Lachine to Brossard</span><span class="kept">$1,170 kept</span></div>
+          <div class="insight">Two-man repeat jobs out-earned four-man one-offs last month. Book more of them.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INSIDE THE APP · six feature hooks, each linking into the silo
+============================================================ -->
+<section id="appgrid" class="band-ivory on-light round-top">
+  <svg class="motif" style="right:-140px;top:-40px;width:560px;height:560px" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="100" stroke-dasharray="3 9"/><circle cx="200" cy="200" r="46"/><path d="M200 6v76M200 318v76M6 200h76M318 200h76" stroke-linecap="round"/><circle cx="200" cy="200" r="7" fill="currentColor" stroke="none"/></svg><svg class="motif" style="left:-60px;bottom:30px;width:640px;height:200px" viewBox="0 0 640 200" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 170 C 160 150, 200 60, 340 90 S 520 150, 610 40" stroke-dasharray="6 10" stroke-linecap="round"/><circle cx="20" cy="170" r="11"/><circle cx="610" cy="40" r="8" fill="currentColor" stroke="none"/></svg>
+  <div class="wrap beat-inner">
+    <span class="eyebrow cool">Everything in the app, at a glance</span>
+    <h2 style="font-size:clamp(30px,4vw,48px);max-width:760px">One app in every crew's pocket. Six jobs it does all day.</h2>
+    <p class="appintro">You don't need an office or a back-office hire to run this. CrewFinding lives on the phones your crew already carries — it captures every hour, signature and dollar on site, dispatches the work to your crews, partners and subcontractors, and hands it all to you, wherever you are.</p>
+    <div class="agrid">
+      <a class="acard" href="/gps-tracking">
+        <span class="clip" data-src="assets/clip-gps.mp4" data-mode="loop"><img src="assets/clip-gps.webp" alt="Glowing GPS pin with geofence ring" loading="lazy" width="1112" height="834"></span>
+        <h3>GPS crew tracking</h3>
+        <p class="mech">Every crew on the live map, with a geofence that stamps the arrival time on its own.</p>
+        <p class="ben">You know the job started because the app saw them arrive.</p>
+        <p class="ex"><b>8:04</b> — the box truck crosses the geofence in Lachine. Arrival stamped. Nobody had to call.</p>
+      </a>
+      <a class="acard" href="/time-tracking">
+        <img src="assets/feat-time.webp" alt="Stopwatch with gold progress arc" loading="lazy">
+        <h3>Time clock</h3>
+        <p class="mech">Clock in and clock out per worker, per job, from the phone already in their pocket.</p>
+        <p class="ben">Hours stop being an argument.</p>
+        <p class="ex"><b>7:58</b>, first yard in DDO — three clock-ins. Sixteen lawns later, every minute is on the record.</p>
+      </a>
+      <a class="acard" href="/e-sign">
+        <span class="clip" data-src="assets/clip-esign.mp4" data-mode="loop"><img src="assets/clip-esign.webp" alt="Pen signing a glowing signature on a tablet" loading="lazy" width="1112" height="834"></span>
+        <h3>E-sign documents</h3>
+        <p class="mech">Contracts, job sheets and waivers signed at the door and saved to the job file instantly.</p>
+        <p class="ben">The paperwork that protects you, filed forever.</p>
+        <p class="ex">Drop 4 of 7, the Plateau — the client signs on the phone, <b>2:12 PM</b>, filed before the van pulls away.</p>
+      </a>
+      <a class="acard" href="/job-costing">
+        <span class="clip" data-src="assets/clip-cost.mp4" data-mode="loop"><img src="assets/clip-cost.webp" alt="Stack of receipts with a glowing total line" loading="lazy" width="1112" height="834"></span>
+        <h3>Job costing</h3>
+        <p class="mech">Tracked hours times wages, plus every snapped receipt, tallied per job as it happens.</p>
+        <p class="ben">The real number: what the job cost and what you kept.</p>
+        <p class="ex"><b>$58</b> of gas, Petro-Canada Dorval — snapped at the pump, pinned to Job #2214 before the tank was full.</p>
+      </a>
+      <a class="acard" href="/timesheets">
+        <img src="assets/feat-payroll.webp" alt="Crew timesheet with tracked hours" loading="lazy">
+        <h3>Crew timesheets</h3>
+        <p class="mech">Every worker's hours, clocked per job and totaled for the week — ready when you run payroll.</p>
+        <p class="ben">Run payroll from real numbers, not memory.</p>
+        <p class="ex">Friday <b>4:30</b> — Marc 42.5 h, Dave 39 h, Sam 41 h. Totaled and waiting. Your Sunday night stays yours.</p>
+      </a>
+      <a class="acard" href="/payments">
+        <img src="assets/feat-payment.webp" alt="Card tapping a phone with an orange check" loading="lazy">
+        <h3>Payment collection</h3>
+        <p class="mech">The client pays through the app, on site, the moment the job wraps.</p>
+        <p class="ben">The money comes to you, not through the crew's pocket.</p>
+        <p class="ex"><b>4:40</b> in Brossard — the client taps, <b>$1,840</b> lands, and the crew just drives home.</p>
+      </a>
+    </div>
+    <div class="moretools">
+      <h3>And the rest of the office, in the same app.</h3>
+      <p class="mt-sub">Everything a second crew makes messy, handled from the phone.</p>
+      <div class="agrid toolgrid">
+      <div class="acard">
+        <img src="assets/tool-quotes.webp" alt="A white estimate page with a glowing gold total bar and a gold approval seal" loading="lazy" width="640" height="480">
+        <h3>Quotes and estimates</h3>
+        <p class="mech">Build the estimate in the app, send it to the client, and turn the yes into a scheduled job.</p>
+        <p class="ben">The quote never gets typed in twice.</p>
+        <p class="ex"><b>2:15 PM</b> the client taps accept on the 3-bedroom quote. It is on Thursday's schedule by 2:16.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-invoicing.webp" alt="A navy tablet listing invoices, one marked paid with a glowing gold check, beside a stack of gold coins" loading="lazy" width="640" height="480">
+        <h3>Invoicing</h3>
+        <p class="mech">Send the invoice from the job, see who has paid, and collect in the app.</p>
+        <p class="ben">You stop chasing money through your inbox.</p>
+        <p class="ex"><b>4:40</b> the crew wraps in Brossard, the invoice goes out, and $1,840 lands before they are home.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-notify.webp" alt="A navy smartphone with a floating glass notification banner holding a gold location pin and soft gold ping rings" loading="lazy" width="640" height="480">
+        <h3>Client notifications</h3>
+        <p class="mech">When the crew heads to the job, the client gets a "your crew is on the way" message before anyone knocks.</p>
+        <p class="ben">No more "where are you?" calls from the truck.</p>
+        <p class="ex"><b>7:52</b> "Your crew is on the way, 8 minutes out." The client has already moved the car.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-photos.webp" alt="A dim before photo and a bright after photo with a glowing gold edge, and a gold camera shutter ring between them" loading="lazy" width="640" height="480">
+        <h3>Job photos</h3>
+        <p class="mech">Crews snap before and after photos on the job. Each one is filed to the job with the time and the place.</p>
+        <p class="ben">The proof that the work was done, and done right.</p>
+        <p class="ex"><b>3:05</b> the after photo of the finished yard is filed to the job, stamped and ready if anyone asks.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-customers.webp" alt="A fanned stack of navy client cards connected by a glowing gold timeline thread" loading="lazy" width="640" height="480">
+        <h3>Customer history</h3>
+        <p class="mech">Every client with every past job, quote, signed document and photo in one place.</p>
+        <p class="ben">You know the customer before you call them back.</p>
+        <p class="ex"><b>A repeat client calls.</b> Three jobs since last year, all paid, one signed waiver. Answered in ten seconds.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-offline.webp" alt="A navy phone with no signal inside a glowing gold sync ring with a check mark, and a dashed cloud above it" loading="lazy" width="640" height="480">
+        <h3>Works offline</h3>
+        <p class="mech">Crews keep clocking in, signing and snapping photos with no signal. Everything syncs the moment the phone reconnects.</p>
+        <p class="ben">A dead zone never costs you a signature.</p>
+        <p class="ex"><b>1:30</b> basement job, no bars. The job sheet is signed anyway and files itself when the crew is back on the road.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-truckcosts.webp" alt="A gold delivery truck on a navy platform with floating gold fuel, wrench and receipt tokens" loading="lazy" width="640" height="480">
+        <h3>Truck costs and maintenance</h3>
+        <p class="mech">Log fuel, repairs and servicing as expenses against each truck, with the receipt photo.</p>
+        <p class="ben">You see what each truck really costs to keep running.</p>
+        <p class="ex"><b>Truck 2</b> brake job, $640, logged on the spot. It sits on the truck's cost line instead of in a pile.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-language.webp" alt="A navy glass globe with gold meridians and floating speech bubbles" loading="lazy" width="640" height="480">
+        <h3>Any language</h3>
+        <p class="mech">The app speaks your crew's language, whichever one it is.</p>
+        <p class="ben">Everyone on the crew understands every step.</p>
+        <p class="ex"><b>6:58</b> the foreman reads the day in Portuguese while the owner reads the same job in English. Same steps, same numbers.</p>
+      </div>
+      <div class="acard">
+        <img src="assets/tool-reviews.webp" alt="A navy smartphone with a floating glass review card holding five glowing gold stars and a gold heart speech bubble" loading="lazy" width="640" height="480">
+        <h3>Customer reviews</h3>
+        <p class="mech">After the job is done, the customer gets a review request, while the finished work is fresh.</p>
+        <p class="ben">Good reviews bring in your next job.</p>
+        <p class="ex"><b>3:20</b> the garage is empty and signed off. By <b>3:31</b> a 5-star review is in.</p>
+      </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     FOUNDER PROOF
+============================================================ -->
+<section class="founder band-ivory on-light round-top">
+  <svg class="motif" style="left:-170px;top:6vh;width:520px;height:520px" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="100" stroke-dasharray="3 9"/><circle cx="200" cy="200" r="46"/><path d="M200 6v76M200 318v76M6 200h76M318 200h76" stroke-linecap="round"/><circle cx="200" cy="200" r="7" fill="currentColor" stroke="none"/></svg>
+  <p><strong>Built by a moving company owner</strong> who ran real crews for years and couldn't find software that told him what a job actually cost. Not a VC product team guessing at field work. Built from the truck cab out.</p>
+  <h2 class="youhead">Built for the week you're having right now.</h2>
+  <div class="yougrid">
+    <div>
+      <p class="you">One crew, you're on the job with them. The day a second crew rolls out, half your company is somewhere you can't see. Hours turn into arguments, receipts vanish, and Sunday night disappears into adding up timesheets. That's not you doing it wrong — that's a clipboard doing a phone's job.</p>
+      <p class="you">CrewFinding takes everything a second crew makes messy — the hours, the signatures, the receipts, the payment — and files it automatically from the phones your crew already carries. You get paid for everything you did, you can prove every minute of it, and you finally see what each job left in your pocket.</p>
+      <p class="you">And some owners are never on the job at all. If you're in logistics or lead generation — you book the work, and crews you don't even own run it — this phone is your eyes on the ground: every arrival, every signature, every dollar, live from wherever you are. The payment comes through the app, not through someone's pocket, so nothing leaks between the job site and you.</p>
+    </div>
+    <div class="watchwrap" aria-label="The CrewFinding live map watched from a phone, from anywhere">
+      <div class="watchphone">
+        <div class="wnotch" aria-hidden="true"></div>
+        <div class="whead"><i></i>LIVE · MONTREAL · 3 CREWS OUT</div>
+        <div class="wmap">
+          <img class="wbase" src="assets/city-basemap.webp" alt="" aria-hidden="true">
+          <span class="wpin" style="--x:26%;--y:28%;--wd:0s"><img src="assets/veh-mover.webp" alt="Moving crew live on the map"></span>
+          <span class="wpin" style="--x:64%;--y:52%;--wd:1.2s"><img src="assets/veh-delivery.webp" alt="Delivery crew live on the map"></span>
+          <span class="wpin" style="--x:40%;--y:74%;--wd:2.1s"><img src="assets/veh-landscape.webp" alt="Landscaping crew live on the map"></span>
+        </div>
+        <div class="wrow"><span>Job #2214 · Job sheet</span><span class="st">✓ signed 8:24</span></div>
+        <div class="wrow"><span>Drop 4/7 · Plateau</span><span class="st">✓ paid 2:12</span></div>
+      </div>
+      <div class="wcap">YOU · WHEREVER YOU ARE</div>
+    </div>
+  </div>
+  <div class="whostrip" aria-label="Who uses CrewFinding">
+    <a href="moving/index.html">🚚 MOVING COMPANIES</a>
+    <a href="trucking-logistics/index.html">🚛 TRUCKING &amp; LOGISTICS</a>
+    <a href="/delivery">📦 DELIVERY TEAMS</a>
+    <a href="landscaping/index.html">🌿 LANDSCAPING CREWS</a>
+    <a href="junk-removal/index.html">🗑️ JUNK REMOVAL</a>
+    <a href="/construction">👷 CONSTRUCTION SUBS</a>
+    <a href="/electrical">⚡ ELECTRICAL COMPANIES</a>
+    <a href="/brokers">🧾 BROKERS WITH NO TRUCKS</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 6 · THE SIGNATURE: ADD A TRUCK, THEIR BILL CLIMBS, OURS NEVER MOVES
+============================================================ -->
+<section id="pricing" class="band-white on-light">
+  <div class="stage">
+    <div class="beat-inner">
+      <div class="p-head wrap">
+        <span class="eyebrow cool">The pricing</span>
+        <h2>They charge per seat. CrewFinding charges per truck.</h2>
+        <p class="p-sub">Their bills climb with every hire. Ours only moves when you add a truck. Add one and watch.</p>
+      </div>
+      <div class="fleetcalc" id="fleetcalc">
+        <div class="fc-fleet">
+          <div class="fc-top">
+            <div class="fc-count num"><b id="teamsize">1</b> <span id="tword">truck</span> &middot; <span id="tpeople">3</span> people</div>
+            <div class="fc-ctrl">
+              <button type="button" class="fc-minus" id="fcminus" aria-label="Remove a truck">&minus;</button>
+              <button type="button" class="fc-add" id="fcadd">+ Add a truck</button>
+            </div>
+          </div>
+          <div class="fc-row" id="fcrow"></div>
+          <p class="fc-more" id="fcmore">More than 5 trucks? <a href="mailto:hello@crewfinding.com">Contact us</a></p>
+        </div>
+        <div class="fc-duel">
+          <div class="fc-meter">
+            <div class="fc-lab">THEIR BILL<i>PER SEAT</i></div>
+            <div class="fc-digits num"><span class="cur">$</span><span class="odo" id="odo" aria-hidden="true"></span><span class="per">/mo</span></div>
+            <div class="fc-sub">CHEAPEST PLAN THAT FITS YOUR PEOPLE</div>
+          </div>
+          <div class="fc-plate">
+            <div class="fc-lab">CREWFINDING<i>BY TRUCK</i></div>
+            <div class="fc-digits num"><span class="cur">$</span><b id="cfv">40</b><span class="per">/mo CAD</span></div>
+            <div class="fc-sub"><span class="fc-ok" id="fcok">&#10003; Everyone included</span></div>
+          </div>
+        </div>
+        <div class="pdelta num" id="pdelta"></div>
+        <p class="sr-only" id="fcsr" aria-live="polite"></p>
+      </div>
+      <div class="tierstrip num" aria-label="CrewFinding pricing">
+        <span>UP TO 2 TRUCKS · <b>$40</b>/mo CAD</span>
+        <span>3 TRUCKS · <b>$60</b>/mo</span>
+        <span>UP TO 5 TRUCKS · <b>$80</b>/mo</span>
+        <span>6+ TRUCKS · <a href="mailto:hello@crewfinding.com" style="color:inherit;text-decoration:underline">CONTACT US</a></span>
+      </div>
+      <p class="p-promise">The whole price is on this page. Every crew member, every feature, GPS included. The price moves when you add a truck, never when you hire.</p>
+      <p class="p-fine">Competitor figure: cheapest published Housecall Pro plan for the same headcount (3 people per truck, annual billing). Their figures are in US dollars as published and are not converted. CrewFinding prices are in Canadian dollars (CAD). Competitor plan prices checked on their public pricing page October 19, 2026. Vehicle GPS is a paid add-on there; CrewFinding's GPS is included.</p>
+      <div class="p-links">
+        <a class="seolink" href="pricing/index.html">CrewFinding pricing</a>
+        <a class="seolink" href="/vs-jobber">Jobber alternative</a>
+        <a class="seolink" href="/vs-housecall-pro">Housecall Pro alternative</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BEAT 7 · THE CLOSE: profit resolves in green (pinned scrub)
+============================================================ -->
+<section id="close" class="band-night">
+  <div class="stage">
+    <div class="pool" id="closepool"></div>
+    <div class="beat-inner" style="display:flex;flex-direction:column;align-items:center">
+      <div class="closeledger">
+        <div class="cl" data-at=".08"><span>Revenue</span><span>$1,840.00</span></div>
+        <div class="cl" data-at=".2"><span>Labor</span><span>−$612.00</span></div>
+        <div class="cl" data-at=".32"><span>Gas</span><span>−$58.00</span></div>
+      </div>
+      <div class="bignum" id="bignum">$0<small>KEPT · ONE TUESDAY MOVE</small></div>
+      <div class="closetag" id="closetag">Know what every job really makes.</div>
+      <div class="closebtn" id="closebtn"><a class="btn" href="#" data-store>Download CrewFinding</a><p class="closenote">FREE TO DOWNLOAD · iOS &amp; ANDROID · FROM $40/MO</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER · the crawlable silo under the cinema
+============================================================ -->
+<footer>
+  <div class="fgrid">
+    <div class="fcol">
+      <a class="brand" href="/" style="margin-bottom:16px"><span class="cf" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#FFD100" stroke-width="2"/><circle cx="12" cy="12" r="2.4" fill="#FFD100"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke="#FFD100" stroke-width="2" stroke-linecap="round"/></svg></span><span class="wm">Crew<b>Finding</b></span></a>
+      <p style="font-size:13px;color:var(--fg-mute);margin-top:14px;max-width:240px">The crew operations app that shows the true profit of every job.</p>
+    </div>
+    <div class="fcol">
+      <h4>Product</h4>
+      <a href="/gps-tracking">GPS crew tracking</a>
+      <a href="/job-costing">Job costing</a>
+      <a href="/e-sign">E-sign documents</a>
+      <a href="/timesheets">Crew timesheets</a>
+      <a href="/ai-insights">AI insights</a>
+      <a href="pricing/index.html">Pricing</a>
+    </div>
+    <div class="fcol">
+      <h4>Crews</h4>
+      <a href="moving/index.html">Moving companies</a>
+      <a href="trucking-logistics/index.html">Trucking &amp; logistics</a>
+      <a href="/delivery">Delivery teams</a>
+      <a href="landscaping/index.html">Landscaping crews</a>
+      <a href="junk-removal/index.html">Junk removal crews</a>
+      <a href="/construction">Construction subs</a>
+      <a href="/electrical">Electrical companies</a>
+      <a href="/brokers">Brokers with no trucks</a>
+    </div>
+    <div class="fcol">
+      <h4>Compare</h4>
+      <a href="/vs-jobber">CrewFinding vs Jobber</a>
+      <a href="/vs-housecall-pro">vs Housecall Pro</a>
+      <a href="/vs-workiz">vs Workiz</a>
+      <a href="/vs-spreadsheets">vs spreadsheets</a>
+    </div>
+    <div class="fcol">
+      <h4>Company</h4>
+      <a href="what-is-crewfinding/index.html">What is CrewFinding?</a>
+      <a href="/articles">Guides for crew owners</a>
+      <a href="privacy/index.html">Privacy policy</a>
+      <a href="terms/index.html">Terms of service</a>
+      <a href="/fr/">Français</a>
+    </div>
+  </div>
+  <div class="fbottom">
+    <span>© 2026 CrewFinding. Built in Montreal.</span>
+    <span>Crews glow gold. Profit glows green.</span>
+  </div>
+</footer>
+
+<div class="stickycta" id="stickycta"><a class="btn" href="#" data-store>Download CrewFinding</a></div>
+
+<script src="assets/cf-dispatch.js" defer></script>
+<script src="assets/cf-universal.js" defer></script>
+<script src="assets/cf-live.js" defer></script>
+<script src="libs/gsap.min.js"></script>
+<script src="libs/ScrollTrigger.min.js"></script>
+<script src="libs/lenis.min.js"></script>
+<script>
+(function(){
+"use strict";
+var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var mq = window.matchMedia("(max-width: 820px)");
+var mobile = mq.matches;
+if(mq.addEventListener) mq.addEventListener("change", function(){ location.reload(); });
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- smooth scroll (Lenis drives ScrollTrigger) ---------- */
+if(!reduced && window.Lenis){
+  var lenis = new Lenis({ lerp:.09, wheelMultiplier:1 });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* ---------- hero video: the city breathes (desktop only, static fallback) ---------- */
+(function(){
+  var vid = document.getElementById("cityvid");
+  if(!vid || reduced || mobile) return;
+  vid.src = "assets/hero-city.mp4";
+  vid.preload = "auto";
+  vid.addEventListener("playing", function(){ vid.classList.add("on"); }, {once:true});
+  var p = vid.play();
+  if(p && p.catch) p.catch(function(){ /* autoplay blocked: static basemap stays */ });
+})();
+
+/* ---------- smart store link (primary CTA: download only) ---------- */
+var IOS_URL = "https://apps.apple.com/app/crewfinding";                        // TODO real store URL
+var AND_URL = "https://play.google.com/store/apps/details?id=com.crewfinding"; // TODO real store URL
+document.querySelectorAll("[data-store]").forEach(function(el){
+  el.addEventListener("click", function(e){
+    e.preventDefault();
+    var ua = navigator.userAgent;
+    if(/iPhone|iPad|iPod/i.test(ua)) location.href = IOS_URL;
+    else if(/Android/i.test(ua)) location.href = AND_URL;
+    else document.querySelector(".badges").scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});
+    /* TODO: gtag('event','download_click',{placement:el.closest('section,header,nav,div').id||'nav'}) */
+  });
+});
+
+/* ---------- nav + mobile sticky CTA ---------- */
+var nav = document.getElementById("nav"), sticky = document.getElementById("stickycta");
+ScrollTrigger.create({
+  start:40, end:"max",
+  onUpdate:function(){ nav.classList.add("solid"); },
+  onLeaveBack:function(){ nav.classList.remove("solid"); }
+});
+ScrollTrigger.create({
+  start:function(){ return innerHeight*0.9; },
+  end:function(){ return document.body.scrollHeight - innerHeight*2.4; },
+  onToggle:function(self){ sticky.classList.toggle("on", self.isActive); }
+});
+
+/* =====================================================
+   HERO CITY — generated night grid, crews are the light
+===================================================== */
+(function buildCity(){
+  var NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs, parent){
+    var e = document.createElementNS(NS, name);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  }
+  // Basemap is a Higgsfield render (assets/city-basemap.webp, normalized to night navy #071426).
+  // Routes are drawn in viewBox coords along the render's glowing street grid so
+  // crews read as driving real streets. Street lines (image mapped through
+  // xMidYMid slice): verticals x=286,561,772,995,1245 · horizontals y=199,366,486,660,828.
+  var routes = document.getElementById("cityroutes");
+  /* Paths generated from measured street centerlines (brightness-peak
+     detection on the basemap, including each street's slight tilt), so
+     crews stay ON the glowing roads. Each crew drives its own closed
+     city-block loop (seamless, no teleport at route end); all loops run
+     clockwise, so on a street two loops share, crews pass head-on like
+     two-way traffic instead of riding stacked. Streets: V ~277/568/763/1039,
+     H 210 / ~490 / 661 (right half) / 819 (left half). */
+  var PATHS = [
+    "M673,210 L751,210 Q763,210 763,222 L763,479 Q763,491 751,491 L581,489 Q569,489 569,477 L582,222 Q583,210 595,210 L673,210 Z",
+    "M895,210 L1015,210 Q1027,210 1028,222 L1039,482 Q1039,494 1027,494 L775,491 Q763,491 763,479 L763,222 Q763,210 775,210 L895,210 Z",
+    "M418,489 L557,489 Q569,489 568,501 L552,807 Q552,819 540,819 L251,819 Q239,819 240,807 L266,501 Q267,489 279,489 L418,489 Z",
+    "M418,489 L557,489 Q569,489 568,501 L552,807 Q552,819 540,819 L251,819 Q239,819 240,807 L266,501 Q267,489 279,489 L418,489 Z",
+    "M901,492 L1027,494 Q1039,494 1040,506 L1046,649 Q1046,661 1034,661 L775,661 Q763,661 763,649 L763,503 Q763,491 775,491 L901,492 Z",
+    "M895,210 L1015,210 Q1027,210 1028,222 L1039,482 Q1039,494 1027,494 L775,491 Q763,491 763,479 L763,222 Q763,210 775,210 L895,210 Z"
+  ];
+  PATHS.forEach(function(d,i){
+    el("path",{id:"cr"+i,d:d,fill:"none",stroke:"#7E97B8","stroke-width":2.4,"stroke-dasharray":"9 11",opacity:.6},routes);
+  });
+
+  // fleet markers: top-down Higgsfield vehicles driving the routes.
+  // Each crew = up to three riders synced on the same path (ring under,
+  // vehicle with rotate=auto, chip on top) because SMIL rotate="auto"
+  // on one shared group would spin the ring and chip with the truck.
+  // off = fraction of the route already driven at load, so the fleet
+  // lands spread across the map interior instead of stacked at starts.
+  var pins = document.getElementById("citypins");
+  /* route order: top-center, top-right, left, bottom-left, mid-right.
+     Landscaping gets the mid-right block, the clearest zone beside the copy;
+     service takes the left loop under the headline gradient. Durations are
+     proportional to loop perimeter so every crew drives the same speed. */
+  var FLEET = [
+    {img:"veh-mover",w:55,h:96,dur:42,off:.15,emoji:"🚚",label:"MOVING"},
+    {img:"veh-delivery",w:44,h:84,dur:50,off:.40,emoji:"📦",label:"DELIVERY"},
+    {img:"veh-service",w:41,h:86,dur:58,off:.80,emoji:"🔧",label:"SERVICE",chipY:50},
+    {img:"veh-construction",w:52,h:100,dur:58,off:.30,emoji:"👷",label:"CONSTRUCTION"},
+    {img:"veh-landscape",w:42,h:122,dur:41,off:.55,emoji:"🌿",label:"LANDSCAPING"},
+    /* junk crew shares the top-right loop with delivery, half a lap apart;
+       same dur as delivery so shared-loop speeds match. Stand-in render:
+       veh-construction until the dedicated junk truck is generated. */
+    {img:"veh-construction",w:52,h:100,dur:50,off:.90,emoji:"🗑️",label:"JUNK REMOVAL"}
+  ];
+  function rider(i, p, rotate){
+    var g = el("g",{},pins);
+    var m = el("animateMotion",{dur:p.dur+"s",begin:"-"+(p.dur*p.off).toFixed(1)+"s",repeatCount:"indefinite"},g);
+    if(rotate) m.setAttribute("rotate","auto");
+    el("mpath",{href:"#cr"+i},m);
+    return g;
+  }
+  FLEET.forEach(function(p,i){
+    var under = rider(i, p, false);
+    var ring = el("circle",{r:15,fill:"none",stroke:"#FFD100","stroke-width":2,opacity:.5},under);
+    ring.innerHTML = '<animate attributeName="r" values="10;34" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".55;0" dur="2.6s" repeatCount="indefinite"/>';
+    var veh = rider(i, p, true);
+    // renders point up; rotate(90) maps the nose onto +x so rotate="auto" steers it
+    var rot = el("g",{transform:"rotate(90)"},veh);
+    el("image",{href:"assets/"+p.img+".webp",x:-p.w/2,y:-p.h/2,width:p.w,height:p.h,mask:"url(#pinfeather)"},rot);
+    // trade badge: emoji + label, upright above every vehicle so a stranger
+    // can name each crew's trade instantly
+    var over = rider(i, p, false);
+    var c = el("g",{transform:"translate(26,"+(p.chipY||-58)+")","class":"pinchip"},over);
+    var w = 31 + p.label.length*7.9 + 10;
+    el("rect",{width:w,height:24,rx:12,fill:"#0B1D36",stroke:"rgba(255,209,0,.38)"},c);
+    var e = el("text",{x:9,y:17,"font-size":"13"},c);
+    e.textContent = p.emoji;
+    var t = el("text",{x:31,y:16.5,fill:"#DCE5F0","font-family":"Instrument Sans,sans-serif","font-weight":"700","font-size":"11.5","letter-spacing":".08em"},c);
+    t.textContent = p.label;
+  });
+})();
+
+/* hero parallax + layered intro reveal */
+if(!reduced){
+  /* depth: the whole map drifts as one plate so routes stay glued to streets */
+  gsap.fromTo("#citysvg",{scale:1.14,xPercent:-2},{scale:1.06,xPercent:1.5,ease:"none",
+    scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:true}});
+
+  /* city wakes up: basemap fades in, routes draw themselves, pins arrive */
+  gsap.from("#citybase",{opacity:0,duration:1.6,ease:"power2.out"});
+  document.querySelectorAll("#cityroutes path").forEach(function(p,i){
+    var L = p.getTotalLength();
+    var draw = p.cloneNode();
+    draw.setAttribute("id","crdraw"+i);
+    draw.removeAttribute("stroke-dasharray");
+    draw.setAttribute("stroke-dasharray", L);
+    draw.setAttribute("stroke-dashoffset", L);
+    draw.setAttribute("opacity",".9");
+    draw.setAttribute("stroke-width","3");
+    p.parentNode.appendChild(draw);
+    gsap.set(p,{opacity:0});
+    gsap.to(draw,{attr:{"stroke-dashoffset":0},duration:1.5,delay:.35+i*.16,ease:"power2.inOut"});
+    gsap.to(p,{opacity:.55,duration:.6,delay:1.5+i*.16});
+    gsap.to(draw,{opacity:0,duration:.9,delay:1.7+i*.16});
+  });
+  gsap.from("#citypins > g",{opacity:0,duration:.8,stagger:.16,delay:1.1,ease:"power2.out"});
+
+  gsap.from("[data-hero-line]",{yPercent:110,duration:1,ease:"power4.out",stagger:.14,delay:.15});
+  gsap.from("[data-hero-reveal]",{opacity:0,y:26,duration:.9,ease:"power3.out",stagger:.12,delay:.5});
+}
+
+/* =====================================================
+   BEAT 2 — pinned morphing timeline
+===================================================== */
+var tlsvg = document.getElementById("tlsvg"), tlmarker = document.getElementById("tlmarker");
+var tlprogress = document.getElementById("tlprogress");
+var tlnodes = document.querySelectorAll("#tlsvg .node");
+var tlsway = document.getElementById("tlsway"), tlbeam = document.getElementById("tlbeam"),
+    tltrail = document.getElementById("tltrail"), tltail = document.getElementById("tltail");
+var NODE_X = [80,253,426,600,773,946,1120];
+var VIS = [[0,2,3,4,6],[0,1,2,3,4,5,6],[0,1,2,3,4,5,6]];
+/* the sample day: minutes after midnight when the crew reaches each stop */
+var STAMPS = [[460,495,625,673,768],[484,511,537,566,598,624,651],[478,520,562,605,658,701,740]];
+var NAMES = [["LEAVE SHOP","AT CLIENT","LOADED","AT NEW HOME","DONE · PAID"],
+  ["Verdun","LaSalle","NDG","Plateau","Rosemont","Anjou","Longueuil"],
+  ["Beaconsfield","Kirkland","DDO","Pointe-Claire","Dorval","Lachine","Verdun"]];
+var KEPT = [42,54,34,-2,41,53,31];
+var tlcopies = document.querySelectorAll(".tl-copy"), tldots = document.querySelectorAll(".tl-dots i");
+/* the marker IS the trade: box truck, delivery van, landscaping pickup */
+var tlveh = document.getElementById("tlveh");
+var TLVEH = [["assets/truck-mover.webp",27,64],["assets/truck-delivery.webp",27,58],["assets/truck-landscape.webp",22,80]];
+var VS = 1;
+var hudNow = document.getElementById("hudnow"), hudClock = document.getElementById("hudclock"),
+    hudFiled = document.getElementById("hudfiled"), hudK4 = document.getElementById("hudk4"), hudV4 = document.getElementById("hudv4");
+var tlPhase = -1, tlKey = [], hudCache = {};
+var DW = 1.15, SG = 3;          /* a stop lasts about a third as long as the drive to the next one */
+function easeIO(t){ return t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+function hm(m){ m = Math.round(m); var h = Math.floor(m/60); return h + ":" + (m%60<10?"0":"") + (m%60); }
+function hud(el, key, txt, cls){
+  var id = el.id;
+  if(hudCache[id] === txt + "|" + cls) return;
+  hudCache[id] = txt + "|" + cls;
+  el.textContent = txt; el.className = "hud-v" + (cls ? " " + cls : "");
+  if(!reduced){ void el.offsetWidth; el.classList.add("tick"); }
+}
+/* where is the truck, and what is it doing, at this point in the phase */
+function place(local, xs){
+  var L = xs.length, total = L*DW + (L-1)*SG, u = local*total, acc = 0;
+  for(var i=0;i<L;i++){
+    if(u < acc + DW) return {x:xs[i], idx:i, dw:(u-acc)/DW, seg:-1, t:0};
+    acc += DW;
+    if(i < L-1){
+      if(u < acc + SG){ var t = (u-acc)/SG; return {x:xs[i] + (xs[i+1]-xs[i])*easeIO(t), idx:-1, dw:0, seg:i, t:t}; }
+      acc += SG;
+    }
+  }
+  return {x:xs[L-1], idx:L-1, dw:1, seg:-1, t:1};
+}
+function levelFromDw(dw){ return dw<.02?0 : dw<.2?1 : dw<.35?2 : dw<.55?3 : dw<.75?4 : 5; }
+var tlPrevX = 80, tlSp = 0, tlTime = 0;
+function setTimeline(p){
+  var ph = p < .34 ? 0 : p < .67 ? 1 : 2;
+  if(ph !== tlPhase){
+    tlPhase = ph; tlKey = []; hudCache = {};
+    tlsvg.setAttribute("class", ["ph-a","ph-b","ph-c"][ph]);
+    var v = TLVEH[ph], w = v[1]*VS, h = v[2]*VS;
+    tlveh.setAttribute("href", v[0]);
+    tlveh.setAttribute("x", -w/2); tlveh.setAttribute("y", -h/2);
+    tlveh.setAttribute("width", w); tlveh.setAttribute("height", h);
+    tlbeam.setAttribute("d", "M" + (h/2-4) + ",-11 L" + (h/2+122) + ",-40 L" + (h/2+122) + ",40 L" + (h/2-4) + ",11 Z");
+    tltail.setAttribute("transform", "translate(" + (41 - h/2) + ",0)");
+    tlcopies.forEach(function(c,i){ c.classList.toggle("on", i === ph); });
+    tldots.forEach(function(d,i){ d.classList.toggle("on", i <= ph); });
+    hudK4.textContent = ["COLLECTED","DOORS DONE","KEPT TODAY"][ph];
+  }
+  var vis = VIS[ph], xs = vis.map(function(i){ return NODE_X[i]; });
+  var local = ph === 0 ? p/.34 : ph === 1 ? (p-.34)/.33 : (p-.67)/.33;
+  local = Math.max(0, Math.min(1, local));
+  var pl = place(local, xs), tx = pl.x, L = xs.length;
+  tlprogress.setAttribute("x2", tx);
+  /* how far through its stop is each node: 0 = ahead, 1 = pinged, 2 = stamped, 3/4/5 = photo, signature, payment */
+  var lv = [], k;
+  for(k=0;k<L;k++){
+    var l;
+    if(pl.idx >= 0) l = k < pl.idx ? 5 : k === pl.idx ? levelFromDw(pl.dw) : 0;
+    else l = k <= pl.seg ? 5 : 0;
+    if(l === 0 && tx >= xs[k] - 6) l = 1;
+    lv.push(l);
+  }
+  tlnodes.forEach(function(nd,i){
+    var kk = vis.indexOf(i), l = kk < 0 ? 0 : lv[kk];
+    if(tlKey[i] === l) return;
+    tlKey[i] = l;
+    nd.classList.toggle("done", l >= 1); nd.classList.toggle("ping", l >= 1);
+    nd.classList.toggle("stamped", l >= 2);
+    nd.classList.toggle("p1", l >= 3); nd.classList.toggle("p2", l >= 4); nd.classList.toggle("p3", l >= 5);
+  });
+  /* live panel */
+  var names = NAMES[ph], st = STAMPS[ph], clock;
+  if(pl.idx >= 0){ clock = st[pl.idx]; hud(hudNow, 0, ph===0 ? names[pl.idx] : "STOP " + (pl.idx+1) + " · " + names[pl.idx], "live"); }
+  else { clock = st[pl.seg] + (st[pl.seg+1]-st[pl.seg]) * pl.t; hud(hudNow, 0, "EN ROUTE · " + names[pl.seg+1], ""); }
+  var ck = hm(clock); if(hudClock.textContent !== ck) hudClock.textContent = ck;
+  var filed = 0, kept = 0, done = 0;
+  for(k=0;k<L;k++){
+    var l2 = lv[k];
+    if(ph === 0){ filed += (l2>=3?1:0) + (l2>=4?1:0) + (k===L-1 && l2>=5 ? 1 : 0); }
+    else if(ph === 1){ filed += (l2>=3?1:0) + (l2>=4?1:0) + (l2>=5?1:0); if(l2>=5) done++; }
+    else { if(l2>=3){ filed++; kept += KEPT[k]; } }
+  }
+  hud(hudFiled, 0, String(filed), "");
+  if(ph === 0) hud(hudV4, 0, lv[L-1] >= 4 ? "$1,840" : "$0", lv[L-1] >= 4 ? "profit" : "");
+  else if(ph === 1) hud(hudV4, 0, done + " of 7", "");
+  else hud(hudV4, 0, (kept<0?"−$":"+$") + Math.abs(kept), "profit");
+  /* weight: speed from how far the truck moved this frame */
+  var dx = Math.abs(tx - tlPrevX); tlPrevX = tx;
+  tlSp += (Math.min(1, dx/6) - tlSp) * .22;
+  var sway = tlSp > .06 ? Math.sin(tx/41) * 1.1 * tlSp : Math.sin(tlTime*9) * .28;
+  tlmarker.setAttribute("transform", "translate(" + tx + "," + (140 + sway).toFixed(2) + ")");
+  tlbeam.style.opacity = (.14 + .62*tlSp).toFixed(3);
+  var tw = 130 * tlSp;
+  tltrail.setAttribute("x", -(40 + tw)); tltrail.setAttribute("width", tw.toFixed(1));
+  tltail.style.opacity = (.35 + .65*(1 - tlSp)).toFixed(3);
+}
+var tlTarget = 0, tlDisp = 0, tlLive = false;
+/* the truck has weight: it chases the scroll position instead of snapping to it */
+gsap.ticker.add(function(time){
+  tlTime = time;
+  if(!tlLive) return;
+  var d = tlTarget - tlDisp;
+  if(reduced) tlDisp = tlTarget; else tlDisp += d * .12;
+  if(Math.abs(d) > .00004 || tlSp > .004) setTimeline(tlDisp);
+});
+if(!mobile){
+  ScrollTrigger.create({
+    trigger:"#timeline", start:"top top", end:"+=340%",
+    pin:"#timeline .stage", pinSpacing:true,
+    onToggle:function(self){ tlLive = self.isActive || self.progress > 0; },
+    onUpdate:function(self){ tlTarget = self.progress; tlLive = true; }
+  });
+}
+if(!reduced && !mobile){
+  gsap.from("#timeline .tl-figure",{opacity:0,y:50,duration:.9,ease:"power3.out",
+    scrollTrigger:{trigger:"#timeline",start:"top 70%",once:true}});
+}
+if(reduced || mobile) setTimeline(.16);
+
+/* =====================================================
+   BEAT 3 — filed manifest + scene
+===================================================== */
+(function(){
+  var rows = document.querySelectorAll("#manifest .mrow");
+  /* manifest rows drive the dossier: hover a row, its page lifts out of the phone */
+  var docEls = document.querySelectorAll("#dossier .d-doc");
+  document.querySelectorAll("#manifest .mrow").forEach(function(row){
+    var d = docEls[+row.dataset.doc];
+    if(!d) return;
+    row.addEventListener("mouseenter", function(){ d.classList.add("lift"); });
+    row.addEventListener("mouseleave", function(){ d.classList.remove("lift"); });
+    row.addEventListener("click", function(){
+      var on = d.classList.contains("lift");
+      docEls.forEach(function(x){ x.classList.remove("lift"); });
+      if(!on) d.classList.add("lift");
+    });
+  });
+  /* touch: tapping a document pulls it out (hover has no mobile equivalent) */
+  docEls.forEach(function(d){
+    d.addEventListener("click", function(){
+      var on = d.classList.contains("lift");
+      docEls.forEach(function(x){ x.classList.remove("lift"); });
+      if(!on) d.classList.add("lift");
+    });
+  });
+  var tl = gsap.timeline({
+    scrollTrigger:{trigger:"#filed", start:"top 62%", once:true}
+  });
+  tl.from("#dossier .d-phone",{opacity:0,y:60,scale:.94,duration:1.1,ease:"power3.out"},0);
+  tl.from("#dossier .d-doc",{opacity:0,y:80,duration:.8,stagger:.14,ease:"power3.out"},.3);
+  rows.forEach(function(r,i){
+    tl.to(r,{opacity:1,x:0,duration:.5,ease:"power2.out",
+      onComplete:function(){ r.classList.add("shine"); }}, .35 + i*.34);
+  });
+  tl.to("#filedchip",{opacity:1,y:0,duration:.5,ease:"power2.out"}, "+=.2");
+  var day = {v:0};
+  tl.to("#daystrip",{opacity:1,y:0,duration:.6,ease:"power2.out"}, "+=.25");
+  tl.to(day,{v:1,duration:1.2,ease:"power3.out",
+    onUpdate:function(){
+      document.getElementById("dstops").textContent = Math.round(31*day.v);
+      document.getElementById("dsigs").textContent = Math.round(31*day.v);
+      document.getElementById("dfiles").textContent = Math.round(93*day.v);
+    }}, "-=.3");
+  if(!reduced){
+    gsap.to("#dossier",{y:-34,ease:"none",
+      scrollTrigger:{trigger:"#filed",start:"top bottom",end:"bottom top",scrub:true}});
+  }
+})();
+
+/* =====================================================
+   BEAT 4 — receipt storm + ledger
+===================================================== */
+(function(){
+  var totalEl = document.getElementById("costtotal"), capEl = document.getElementById("bbcap"),
+      rows = gsap.utils.toArray("#ledger .lrow"), segs = gsap.utils.toArray("#bbtrack .bb-seg"),
+      stamp = document.getElementById("fuelstamp"), totalWrap = document.querySelector("#costs .ltotal");
+  var fmt = function(v){ return v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  function final(){
+    rows.forEach(function(r){ r.style.opacity = 1; r.style.transform = "none"; });
+    segs.forEach(function(g){ g.style.width = g.dataset.w + "%"; });
+    totalWrap.style.opacity = 1; totalEl.textContent = "−$670.00"; capEl.innerHTML = "COSTS SO FAR <b>36%</b>";
+  }
+  if(reduced){ final(); return; }
+  var tl = gsap.timeline({ scrollTrigger:{trigger:"#costs", start:"top 62%", once:true} });
+  tl.from("#storm",{opacity:0,y:70,rotate:-5,scale:.92,duration:1.1,ease:"power3.out"},0);
+  var cum = 0, TOT = {v:0}, si = 0, T = .35, STEP = .75;
+  rows.forEach(function(row, i){
+    var n = +row.dataset.n, sign = row.dataset.sign, amt = row.querySelector(".amt"), c = {v:0}, at = T + i*STEP;
+    tl.fromTo(row,{opacity:0,x:-22,y:0},{opacity:1,x:0,duration:.45,ease:"power3.out"},at);
+    tl.add(function(){ row.classList.remove("flash"); void row.offsetWidth; row.classList.add("flash"); }, at);
+    tl.to(c,{v:n,duration:.6,ease:"power2.out",onUpdate:function(){ amt.textContent = sign + "$" + fmt(c.v); }},at+.05);
+    if(sign){
+      var g = segs[si++], from = cum, to = cum + n; cum = to;
+      tl.fromTo(g,{width:0},{width:g.dataset.w + "%",duration:.6,ease:"power3.out"},at+.05);
+      tl.to(TOT,{v:to,duration:.6,ease:"power2.out",onUpdate:function(){
+        totalEl.textContent = "−$" + fmt(TOT.v); capEl.innerHTML = "COSTS SO FAR <b>" + Math.round(TOT.v/1840*100) + "%</b>"; }},at+.05);
+      tl.add(function(){ totalEl.classList.add("tick"); setTimeout(function(){ totalEl.classList.remove("tick"); },320); }, at+.05);
+    }
+  });
+  var endAt = T + (rows.length-1)*STEP;
+  tl.to(totalWrap,{opacity:1,duration:.4},T+.5);
+  tl.add(function(){ stamp.classList.add("on"); }, endAt+.5);
+  gsap.to("#storm",{y:-46,ease:"none",scrollTrigger:{trigger:"#costs",start:"top bottom",end:"bottom top",scrub:true}});
+})();
+
+/* =====================================================
+   INSIDE THE APP — card reveal
+===================================================== */
+if(!reduced){
+  gsap.from(".acard",{opacity:0,y:36,duration:.7,stagger:.09,ease:"power3.out",
+    scrollTrigger:{trigger:"#appgrid",start:"top 72%",once:true}});
+}
+
+/* =====================================================
+   BEAT 5 — AI question + answers
+===================================================== */
+(function(){
+  var q = "Which jobs made me the most money last month?";
+  var typed = document.getElementById("typed");
+  ScrollTrigger.create({
+    trigger:"#ai", start:"top 62%", once:true,
+    onEnter:function(){
+      if(reduced){ typed.textContent = q; gsap.set("#aians .arow, #aians .insight",{opacity:1,y:0}); return; }
+      var i = 0;
+      (function tick(){
+        if(i <= q.length){ typed.textContent = q.slice(0, i++); setTimeout(tick, 30); }
+        else{
+          gsap.to("#aians .arow",{opacity:1,y:0,duration:.5,ease:"power2.out",stagger:.18,delay:.25});
+          gsap.to("#aians .insight",{opacity:1,duration:.6,delay:1.05});
+        }
+      })();
+    }
+  });
+})();
+
+/* =====================================================
+   BEAT 6 — add a truck (interactive)
+   CF price (founder-set 2026-10-19): $40/mo up to 2 trucks, $60/mo for 3 trucks, $80/mo up to 5 trucks, 6+ trucks contact us.
+   Competitor math verified live 2026-07-14 (log in VISION.md):
+   HCP Basic $59/1u, Essentials $149/5u, MAX $299/8u, +$35/user (annual)
+===================================================== */
+(function(){
+  /* competitor math: Housecall Pro published plans, annual billing. Plan prices re-checked 2026-10-19
+     (Basic $59 / 1 user, Essentials $149 / 5 users, Max $299 / 8 users + $35 per user);
+     per-user rates on the lower plans are carried over from the 2026-07-14 check. */
+  function hcCost(n){ return Math.min(59+Math.max(0,n-1)*35, 149+Math.max(0,n-5)*35, 299+Math.max(0,n-8)*35); }
+  var MAXT=5, PPL=3, t=1, demo=null;
+  function cfPrice(n){ return n<=2 ? 40 : n===3 ? 60 : 80; }
+  function planNote(n){ return "\u2713 " + (n<=2 ? "Up to 2 trucks" : n===3 ? "3 trucks" : "Up to 5 trucks") + " \u00b7 everyone included"; }
+  /* the truck faces RIGHT: cab on the right, and it drives in from the left (cab leads) */
+  var FLEET=["mover","delivery","construction","mover","service","delivery","construction","electric"];
+  var $=function(id){return document.getElementById(id);};
+  var cfvEl=$("cfv"), row=$("fcrow"), odo=$("odo"), add=$("fcadd"), minus=$("fcminus"), ok=$("fcok"), sr=$("fcsr"),
+      teamsizeEl=$("teamsize"), twordEl=$("tword"), tpeopleEl=$("tpeople"), pdelta=$("pdelta"), box=$("fleetcalc");
+  if(!row||!odo) return;
+  var cols=[];
+  function ensureCols(n){
+    while(cols.length<n){
+      var d=document.createElement("span"); d.className="d";
+      var s=document.createElement("span"); s.className="s";
+      s.innerHTML="0123456789".split("").map(function(x){return "<b>"+x+"</b>";}).join("");
+      d.appendChild(s); odo.appendChild(d); cols.push(s);
+    }
+  }
+  function setOdo(v){
+    var str=String(v); ensureCols(str.length);
+    cols.forEach(function(s,i){
+      var k=i-(cols.length-str.length), d=k<0?0:+str.charAt(k);
+      s.parentNode.style.display=k<0?"none":"block";
+      s.style.transform="translateY(-"+d+"em)";
+    });
+  }
+  function chip(i){
+    var d=document.createElement("div"); d.className="fc-t";
+    d.innerHTML='<img src="assets/fleet-'+FLEET[(i-1)%FLEET.length]+'.webp" alt="" width="512" height="293" decoding="async"><div class="seats"><i></i><i></i><i></i></div><span class="nm num">TRUCK '+i+'</span>';
+    return d;
+  }
+  var okTimer=null;
+  function flashOk(msg){
+    ok.textContent=msg; ok.classList.remove("pop"); void ok.offsetWidth; ok.classList.add("pop");
+    clearTimeout(okTimer); okTimer=setTimeout(function(){ ok.textContent=planNote(t); ok.classList.remove("pop"); },1600);
+  }
+  function render(announce){
+    var n=t*PPL, them=hcCost(n), CF=cfPrice(t);
+    var have=row.children.length;
+    while(have<t){ have++; row.appendChild(chip(have)); }
+    while(have>t){ row.removeChild(row.lastChild); have--; }
+    teamsizeEl.textContent=t; twordEl.textContent=t>1?"trucks":"truck"; tpeopleEl.textContent=n;
+    setOdo(them);
+    if(cfvEl.textContent!==String(CF)){ cfvEl.textContent=CF; cfvEl.classList.remove("tick"); void cfvEl.offsetWidth; cfvEl.classList.add("tick"); }
+    if(!ok.classList.contains("pop")) ok.textContent=planNote(t);
+    pdelta.innerHTML="Same "+n+" people. <span class=\"save\">You keep $"+((them-CF)*12).toLocaleString("en-US")+" a year.</span>";
+    add.disabled=t>=MAXT; minus.disabled=t<=1;
+    if(announce) sr.textContent="Their bill: $"+them+" a month for "+n+" people. CrewFinding: $"+CF+" a month for " + (t<=2?"up to 2 trucks":t===3?"3 trucks":"up to 5 trucks") + ", everyone included.";
+  }
+  function stopDemo(){ if(demo){ clearInterval(demo); demo=null; } }
+  add.addEventListener("click",function(){ stopDemo(); if(t<MAXT){ t++; render(true); flashOk("\u2713 Truck "+t+" included"); } });
+  minus.addEventListener("click",function(){ stopDemo(); if(t>1){ t--; render(true); } });
+  render(false);
+  if(reduced){ t=3; render(false); return; }
+  /* the first time it scrolls into view it adds trucks on its own up to 5, so the point lands without a tap */
+  var started=false;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting && !started){
+        started=true; io.disconnect();
+        demo=setInterval(function(){
+          if(t>=5){ stopDemo(); return; }
+          t++; render(false); flashOk("\u2713 Truck "+t+" included");
+        },750);
+      }
+    });
+  },{threshold:.55});
+  io.observe(box);
+})();
+
+/* =====================================================
+   BEAT 7 — pinned close
+===================================================== */
+(function(){
+  var bignum = document.getElementById("bignum"), closetag = document.getElementById("closetag"),
+      closebtn = document.getElementById("closebtn"), pool = document.getElementById("closepool"),
+      lines = document.querySelectorAll("#close .cl");
+  function setClose(p){
+    lines.forEach(function(l){ l.classList.toggle("on", p >= parseFloat(l.dataset.at)); });
+    var on = p >= .42;
+    bignum.classList.toggle("on", on);
+    pool.classList.toggle("on", on);
+    if(on){
+      var np = Math.max(0, Math.min(1, (p - .42) / .3)), e = 1 - Math.pow(1 - np, 3);
+      bignum.firstChild.textContent = "$" + Math.round(1170 * e).toLocaleString("en-US");
+    } else bignum.firstChild.textContent = "$0";
+    closetag.classList.toggle("on", p >= .76);
+    closebtn.classList.toggle("on", p >= .84);
+  }
+  ScrollTrigger.create({
+    trigger:"#close", start:"top top", end:"+=200%",
+    pin:"#close .stage", pinSpacing:true, scrub:.4,
+    onUpdate:function(self){ setClose(self.progress); }
+  });
+  if(reduced) setClose(1);
+})();
+
+/* reduced motion: everything visible, final states */
+if(reduced){
+  gsap.set("#manifest .mrow, #costs .lrow, #costs .ltotal, #aians .arow, #aians .insight, #filedchip, #daystrip",{opacity:1,x:0,y:0});
+  document.getElementById("costtotal").textContent = "−$670.00";
+  document.getElementById("dstops").textContent = "31";
+  document.getElementById("dsigs").textContent = "31";
+  document.getElementById("dfiles").textContent = "93";
+}
+})();
+</script>
+<script src="assets/cf-clips.js" defer></script>
+</body>
+</html>

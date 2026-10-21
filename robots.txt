@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://crewfinding.com/sitemap.xml

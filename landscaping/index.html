@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>Landscaping Crew Software | GPS Crews, Time Per Yard, Profit Per Lawn | CrewFinding</title>
+<meta name="description" content="CrewFinding tracks landscaping crews yard by yard: GPS arrivals, time per lawn, hours per worker, and the profit of every property on the route — including the lawns that lose money. Plans from $40 a month.">
+<link rel="canonical" href="https://crewfinding.com/landscaping/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B1F3A'/%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%23FFD100' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='2.2' fill='%23FFD100'/%3E%3Cpath d='M12 2v3M12 19v3M2 12h3M19 12h3' stroke='%23FFD100' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:title" content="Landscaping crew software: GPS crews, time per yard, profit per lawn">
+<meta property="og:image" content="https://crewfinding.com/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/cf.css">
+<link rel="stylesheet" href="../assets/cf-dispatch.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Does CrewFinding work for small landscaping companies?","acceptedAnswer":{"@type":"Answer","text":"That is exactly who it is built for. CrewFinding is designed for landscaping companies running two to five crews, priced by truck, from $40 a month, with everyone included."}},
+    {"@type":"Question","name":"Can CrewFinding tell me which lawns make money?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every yard gets its own clock. The app shows each lawn's price minus the crew time it burned, so a $45 yard that takes 1:04 of a three-man crew shows its loss the day it happens, not at the end of the season."}},
+    {"@type":"Question","name":"Does it track my crews between yards?","acceptedAnswer":{"@type":"Answer","text":"Every crew appears on a live map, and a geofence stamps the arrival time at each property automatically. You can watch the route from home, the shop, or another city."}},
+    {"@type":"Question","name":"Can my crew prove a yard was done?","acceptedAnswer":{"@type":"Answer","text":"Yes. The crew snaps a photo of the finished yard and it files to that property's record with the time and the GPS stamp. When a client says you never came, you answer with a photo taken in their backyard."}},
+    {"@type":"Question","name":"Can clients sign seasonal contracts on a phone?","acceptedAnswer":{"@type":"Answer","text":"Yes. The client signs the season contract on your crew's phone at the door, and it files itself to the client's record instantly. It cannot be lost."}},
+    {"@type":"Question","name":"What does CrewFinding cost for a landscaping company?","acceptedAnswer":{"@type":"Answer","text":"Plans start at $40 a month and are priced by truck: $40 for up to 2 trucks, $60 for 3 trucks and $80 for up to 5 trucks. For more than 5 trucks, contact us. Prices are in Canadian dollars. Everybody is included and every feature is included: GPS tracking, e-sign, job costing, crew timesheets and payment collection."}},
+    {"@type":"Question","name":"Does it handle payroll for my landscaping crew?","acceptedAnswer":{"@type":"Answer","text":"CrewFinding does not run payroll. It tracks every worker's hours per yard and totals them into a timesheet, so when you run payroll you are working from exact tracked hours instead of paper or memory."}}
+  ]
+}
+</script>
+<style>
+.hero{padding:150px 0 110px;overflow:hidden}
+.herogrid{display:grid;grid-template-columns:1.15fr 1fr;gap:50px;align-items:center}
+@media(max-width:880px){.herogrid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-.028em;max-width:700px}
+.hero .sub{color:var(--fg-body);font-size:clamp(17px,2vw,19px);line-height:1.7;max-width:560px;margin:24px 0 32px}
+.hero .sub strong{color:#fff;font-weight:700}
+.herovis{position:relative;display:grid;place-items:center;min-height:360px}
+.herovis::before{content:"";position:absolute;width:560px;height:560px;max-width:120%;border-radius:50%;background:radial-gradient(circle,rgba(255,209,0,.17),transparent 62%)}
+.herovis .spin{position:absolute;width:min(470px,100%);height:auto;animation:spin 90s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.herotruck{position:relative;width:min(300px,66vw);display:block;animation:bob 6s ease-in-out infinite;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 12%,#000 88%,transparent);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 12%,#000 88%,transparent);mask-composite:intersect}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@media(max-width:880px){.herovis{min-height:300px}}
+/* the day, as a timeline (ivory) */
+.day{padding:110px 0 100px;overflow:hidden}
+.day h2{font-size:clamp(30px,4vw,52px);max-width:740px}
+.steps{margin-top:44px;max-width:720px;--tw:64px;--gap:20px}
+.step{position:relative;display:flex;gap:var(--gap);padding:22px 0;opacity:0;transform:translateY(18px);transition:opacity .6s ease-out,transform .6s ease-out}
+.step.in{opacity:1;transform:none}
+.step:not(:last-child)::after{content:"";position:absolute;left:calc(var(--tw) + var(--gap) + 21px);top:66px;bottom:-22px;width:2px;background:linear-gradient(var(--gold),rgba(255,209,0,.25))}
+.step .t{font-weight:700;font-size:15px;color:var(--accent);white-space:nowrap;padding-top:11px;min-width:var(--tw)}
+.step .e{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid var(--gold);display:grid;place-items:center;font-size:20px;flex:none;box-shadow:0 6px 18px rgba(11,31,58,.1);position:relative;z-index:1}
+.step h3{font-size:19px;margin-bottom:6px;padding-top:8px}
+.step p{color:var(--fg-body);font-size:16px;line-height:1.65}
+.step .kept{color:var(--profit-t);font-weight:700}
+.step p b{color:var(--fg);font-weight:700}
+.step .lost{color:var(--loss-t);font-weight:700}
+@media(max-width:560px){.steps{--tw:50px;--gap:12px}.step .t{font-size:13.5px}}
+/* pains (navy) */
+.pains{padding:100px 0}
+.pains h2{font-size:clamp(30px,4vw,52px)}
+.paingrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+@media(max-width:880px){.paingrid{grid-template-columns:1fr}}
+.band-navy .pain{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+/* features (white) */
+.feats{padding:100px 0}
+.feats h2{font-size:clamp(30px,4vw,52px);max-width:760px}
+.featgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+@media(max-width:880px){.featgrid{grid-template-columns:1fr}}
+/* founder (night) */
+.founder{padding:96px 24px;text-align:center}
+.founder p{max-width:680px;margin:0 auto;color:var(--fg-body);font-size:clamp(18px,2.2vw,22px);line-height:1.7;position:relative;z-index:1}
+.founder p strong{color:#fff;font-weight:700}
+/* faq (ivory) */
+.faq{padding:100px 0}
+.faq h2{font-size:clamp(30px,4vw,52px)}
+.close h2{max-width:760px}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="always">
+  <a class="brand" href="../index.html"><span class="cf" aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19"><circle cx="12" cy="12" r="6.5" fill="none" stroke="#FFD100" stroke-width="2"/><circle cx="12" cy="12" r="2.4" fill="#FFD100"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke="#FFD100" stroke-width="2" stroke-linecap="round"/></svg></span><span class="wm">Crew<b>Finding</b></span></a>
+  <div class="navlinks">
+    <a class="plain" href="../pricing/index.html">Pricing</a>
+    <div class="navdrop">
+      <button class="ndbtn" type="button" aria-haspopup="true">Who it's for <span>▾</span></button>
+      <div class="ndmenu">
+        <div class="ndcard">
+          <a href="../moving/index.html">🚚 Moving companies</a>
+          <a href="../trucking-logistics/index.html">🚛 Trucking &amp; logistics</a>
+          <a href="../landscaping/index.html">🌿 Landscaping crews</a>
+          <a href="../junk-removal/index.html">🗑️ Junk removal</a>
+          <span class="ndsoon">MORE TRADES COMING</span>
+        </div>
+      </div>
+    </div>
+    <a class="plain" href="../what-is-crewfinding/index.html">What is CrewFinding?</a>
+    <a class="btn small" href="#" data-store>Download CrewFinding</a>
+  </div>
+</nav>
+
+<section class="hero citytex band-night">
+  <div class="wrap herogrid inner">
+    <div>
+      <span class="eyebrow">For landscaping crews</span>
+      <h1>Every yard gets a clock. Every lawn prints its number.</h1>
+      <p class="sub">CrewFinding tracks your landscaping crews yard by yard: GPS arrivals, time per lawn, hours per worker, and the profit of every property on the route — <strong>including the ones that lose money</strong>.</p>
+      <div class="ctarow">
+        <a class="btn" href="#" data-store>Download CrewFinding</a>
+        <div class="badges">
+          <a class="badge" href="https://apps.apple.com/app/crewfinding" data-ios>
+            <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+            <span><span class="b1">Download on the</span><br><span class="b2">App Store</span></span>
+          </a>
+          <a class="badge" href="https://play.google.com/store/apps/details?id=com.crewfinding" data-android>
+            <svg viewBox="0 0 512 512" fill="#fff"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+            <span><span class="b1">Get it on</span><br><span class="b2">Google Play</span></span>
+          </a>
+        </div>
+      </div>
+      <p class="ctanote">FREE TO DOWNLOAD · FROM $40/MO · PRICED BY TRUCK · NEVER PER SEAT</p>
+    </div>
+    <div class="herovis"><svg class="spin" viewBox="0 0 400 400" fill="none" stroke="#FFD100" stroke-width="1.4" aria-hidden="true"><circle cx="200" cy="200" r="190" opacity=".35"/><circle cx="200" cy="200" r="150" stroke-dasharray="3 10" opacity=".55"/><path d="M200 4v52M200 344v52M4 200h52M344 200h52" stroke-linecap="round" opacity=".6"/></svg><img class="herotruck" src="../assets/veh-landscape.webp" alt="CrewFinding landscaping pickup towing a mower trailer, seen from above on the live map"></div>
+  </div>
+</section>
+
+<section class="day band-ivory on-light round-top">
+  <svg class="motif" style="right:-150px;top:30px;width:520px;height:520px" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="100" stroke-dasharray="3 9"/><circle cx="200" cy="200" r="46"/><path d="M200 6v76M200 318v76M6 200h76M318 200h76" stroke-linecap="round"/><circle cx="200" cy="200" r="7" fill="currentColor" stroke="none"/></svg>
+  <div class="wrap inner">
+    <span class="eyebrow cool">One route, start to requote</span>
+    <h2>A Thursday through the West Island, exactly as CrewFinding saw it.</h2>
+    <div class="steps">
+      <div class="step"><span class="t num">07:58</span><span class="e">🌳</span><div><h3>First yard, DDO — three clock-ins</h3><p>The geofence sees the trailer arrive and the crew clocks in on the phones already in their pockets. The route is live on your map before the mowers start.</p></div></div>
+      <div class="step"><span class="t num">08:33</span><span class="e">✅</span><div><h3>DDO done in 0:35 — the yard prints its verdict</h3><p>The crew snaps a photo of the finished lawn and it files to the property with the time stamp. $60 lawn, $26 of crew time: <span class="kept num">$34 kept</span>. Nobody wrote anything down. On to Beaconsfield.</p></div></div>
+      <div class="step"><span class="t num">11:26</span><span class="e">🌿</span><div><h3>Pointe-Claire runs long</h3><p>The hedges eat 1:04 of a three-man crew. That $45 yard burned $47 of crew time: <span class="lost num">−$2</span>, shown in red the day it happens — not a feeling you argue about in October.</p></div></div>
+      <div class="step"><span class="t num">14:05</span><span class="e">✍️</span><div><h3>A new seasonal client signs in Kirkland</h3><p>The season contract is signed on the crew's phone at the door and files itself to the client's record. No paper rides home in the truck.</p></div></div>
+      <div class="step"><span class="t num">17:05</span><span class="e">🧾</span><div><h3>Route done: seven lawns, real numbers</h3><p>$480 billed, $227 of tracked crew time, <span class="kept num">$253 kept</span> — and one Pointe-Claire lawn flagged to requote before next Thursday.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSAL-START -->
+<!-- ============================================================
+     DISPATCH · any service business: your crews, your partners, your subcontractors, tracked to done
+============================================================ -->
+<section id="dispatch" class="band-night dspsec" data-vertical="landscaping" style="padding:14vh 0 6vh;position:relative">
+  <div class="wrap beat-inner">
+    <div class="dsp-top">
+      <div>
+        <span class="eyebrow cool">Scheduling + dispatch</span>
+        <h2>Book the job. Send it to any crew. See it received.</h2>
+      </div>
+      <div class="dsp-copy"><p>Most service businesses don't run every job with their own people. Some go to a partner you trust, or a subcontractor you hire for the day. CrewFinding puts all of it on one dispatch board: your own crews, your partners and your subcontractors. Create the job, pick who does it, set the route and send it. The moment they receive it and accept, you see it, with the time.</p></div>
+    </div>
+    <ol class="flow" data-flow aria-label="How a job moves, from booking to the final mile">
+        <li data-s="1"><i>1</i><b>Book</b><span>Create the job</span></li>
+        <li data-s="2"><i>2</i><b>Assign</b><span>Crew, partner or subcontractor</span></li>
+        <li data-s="3"><i>3</i><b>Received</b><span>Accepted, with the time</span></li>
+        <li data-s="4"><i>4</i><b>Tracked</b><span>Job sheet signed, GPS live</span></li>
+        <li data-s="5"><i>5</i><b>Final mile</b><span>Customer signs off</span></li>
+        <em class="fg g1">SCHEDULING AND DISPATCH</em><em class="fg g2">JOB TRACKING</em>
+      </ol>
+    
+    <div class="dispcard" data-board>
+      <div class="sh-head"><span>DISPATCH BOARD · MONDAY</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="db-grid">
+        <div class="db-queue"><div class="db-h">TO ASSIGN</div>
+          <div class="db-job" data-job><b data-u="j1t">Weekly lawn care</b><span data-u="j1s">Dollard-des-Ormeaux</span></div>
+          <div class="db-job" data-job><b data-u="j2t">Spring cleanup</b><span data-u="j2s">Pointe-Claire</span></div>
+          <div class="db-job" data-job><b data-u="j3t">Garden bed install</b><span data-u="j3s">Kirkland</span></div>
+        </div>
+        <div class="db-lanes">
+          <div class="db-h">WHO DOES IT</div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16.5 14.2c2.9.2 4.5 2.2 4.5 5.3"/></svg></i><div><b>YOUR OWN CREW</b><span>Your crew gets the day and the route</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:45</u></i><i data-rc="recv"><b>RECEIVED</b><u>6:47</u></i><i data-rc="acc"><b>ACCEPTED</b><u>6:52</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></i><div><b>YOUR PARTNER</b><span>A company you work with gets the job</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:46</u></i><i data-rc="recv"><b>RECEIVED</b><u>7:03</u></i><i data-rc="acc"><b>ACCEPTED</b><u>7:10</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+          <div class="db-lane" data-lane>
+          <div class="db-lh"><i class="db-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c0-3.8 2.9-6.2 6.5-6.2s6.5 2.4 6.5 6.2"/><path d="M19 5v6M16 8h6"/></svg></i><div><b>A SUBCONTRACTOR</b><span>A crew you hire for the day receives it in the app</span></div></div>
+          <div class="db-slot" data-slot></div>
+          <div class="db-rc"><i data-rc="sent"><b>SENT</b><u>6:46</u></i><i data-rc="recv"><b>RECEIVED</b><u>7:12</u></i><i data-rc="acc"><b>ACCEPTED</b><u>7:30</u></i><em class="db-route">Job sheet and route on their phone</em></div>
+        </div>
+        </div>
+      </div>
+      <div class="db-foot"><span class="db-sum" data-sum aria-live="polite">0 OF 3 RECEIVED</span><button type="button" class="sh-replay" data-board-replay>REPLAY THE BOARD</button></div>
+    </div>
+    <p class="dsp-note dsp-center">Built for service businesses that run their own crews and partner crews side by side.</p>
+  </div>
+</section>
+<section id="shipment" class="band-night dspsec" style="padding:6vh 0 15vh;position:relative">
+  <div class="wrap beat-inner">
+    
+    <div class="dsp-grid">
+    <div>
+    <div class="shipcard" data-shipment data-say="[&quot;WAITING FOR THE CREW&quot;, &quot;CREW ARRIVED · JOB SHEET SIGNED&quot;, &quot;BETWEEN PROPERTIES · YOUR CREW · GPS LIVE&quot;, &quot;HANDED OFF · SUBCONTRACTOR SIGNED&quot;, &quot;BETWEEN PROPERTIES · SUBCONTRACTOR · GPS LIVE&quot;, &quot;FINISHED · CUSTOMER SIGNED OFF&quot;]">
+      <div class="sh-head"><span data-u="head">JOB #1041 · SPRING CLEANUP, POINTE-CLAIRE</span><span class="sh-live"><i></i>LIVE</span></div>
+      <div class="sh-bar"><span class="sh-status" data-status aria-live="polite">WAITING FOR THE CREW</span><span class="sh-clock" data-clock>--:--</span></div>
+      <svg class="sh-svg" viewBox="0 0 720 130" role="img" aria-label="A landscaping job started by your crew, handed off to a subcontractor crew and finished, tracked the whole way" data-u="aria" data-attr="aria-label">
+        <line x1="46" y1="68" x2="674" y2="68" stroke="#2B4766" stroke-width="2.5" stroke-dasharray="3 11" stroke-linecap="round"/>
+        <line data-prog x1="70" y1="68" x2="70" y2="68" stroke="#FFD100" stroke-width="3.5" stroke-linecap="round" style="filter:drop-shadow(0 0 7px rgba(255,209,0,.7))"/>
+        <g class="sh-node" data-node transform="translate(70,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-node" data-node transform="translate(385,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-node" data-node transform="translate(650,68)"><circle class="ring" r="14"/><circle class="ring r2" r="14"/><circle class="core" r="9"/></g>
+        <g class="sh-badge" data-badge transform="translate(70,20)"><circle r="13"/><text>1</text></g>
+        <g class="sh-badge" data-badge transform="translate(385,20)"><circle r="13"/><text>2</text></g>
+        <g class="sh-badge" data-badge transform="translate(650,20)"><circle r="13"/><text>3</text></g>
+        <text class="mk-lab" x="70" y="112">START</text><text class="mk-lab" x="385" y="112">HAND-OFF</text><text class="mk-lab" x="650" y="112">DONE</text>
+        <g class="sh-veh mk" data-a transform="translate(70,68)"><circle class="mk-ring" r="17"/><circle class="mk-core" r="8"/></g>
+        <g class="sh-veh mk pt dim" data-b transform="translate(428,68)"><circle class="mk-ring" r="17"/><circle class="mk-core" r="8"/></g>
+      </svg>
+      <ol class="sh-rows">
+        <li data-row><i class="n">1</i><div><b data-u="r1b">Crew arrives · Pointe-Claire</b><span class="d" data-u="r1d">The job sheet is signed on the crew&#x27;s phone. GPS starts.</span></div><span class="t">08:22</span><span class="held" data-u="r1h">WITH: YOUR CREW</span></li>
+        <li data-row><i class="n">2</i><div><b data-u="r2b">Between properties · live</b><span class="d" data-u="r2d">Live on your map, every stop timed.</span></div><span class="t">08:22 to 11:40</span><span class="held" data-u="r2h">WITH: YOUR CREW</span></li>
+        <li data-row><i class="n">3</i><div><b data-u="r3b">Handed off · subcontractor crew</b><span class="d" data-u="r3d">The subcontractor signs for the rest of the route. Time and place filed.</span></div><span class="t">11:40</span><span class="held" data-u="r3h">WITH: SUBCONTRACTOR</span></li>
+        <li data-row><i class="n">4</i><div><b data-u="r4b">Finished · Kirkland</b><span class="d" data-u="r4d">The customer signs off. Proof of completion saved with the photos.</span></div><span class="t">15:05</span><span class="held" data-u="r4h">WITH: THE CUSTOMER</span></li>
+      </ol>
+      <button type="button" class="sh-replay" data-replay>REPLAY THE JOB</button>
+    </div>
+    </div>
+    <div class="dsp-copy">
+      <span class="eyebrow cool">Job tracking · the final mile</span>
+      <h2>Then watch it all the way to the final mile.</h2>
+      <p>Once your crew arrives, the job is signed on their phone and GPS tracking starts. You follow it live on your own screen. If it changes hands, that hand-off is signed and time-stamped. At the destination, the recipient signs off on delivery. Your items go all the way to where they belong, with every hand on them recorded.</p>
+      <ul class="dsp-steps">
+        <li><b>Pickup.</b> You sign off and tracking starts.</li>
+        <li><b>In transit.</b> Live on your map, every hand-off signed.</li>
+        <li><b>Delivery.</b> The recipient signs and proof of delivery is filed.</li>
+      </ul>
+      <a class="seolink" href="../trucking-logistics/index.html" style="display:inline-block;margin-top:10px">dispatch and delivery tracking software</a>
+    </div>
+    </div>
+  </div>
+</section>
+<!-- UNIVERSAL-END -->
+<section class="pains band-navy">
+  <svg class="motif" style="left:-40px;bottom:10px;width:640px;height:200px" viewBox="0 0 640 200" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 170 C 160 150, 200 60, 340 90 S 520 150, 610 40" stroke-dasharray="6 10" stroke-linecap="round"/><circle cx="20" cy="170" r="11"/><circle cx="610" cy="40" r="8" fill="currentColor" stroke="none"/></svg>
+  <div class="wrap inner">
+    <span class="eyebrow cool">The three fights CrewFinding ends</span>
+    <h2>Landscaping problems, handled at the yard.</h2>
+    <div class="paingrid">
+      <div class="pain"><div class="ico">💵</div><h3>"Every yard pays fine. Some still lose money."</h3><p>A $45 lawn that takes 1:04 of a three-man crew costs you $47. The clock catches it the day it happens. <b>Requote the hedge monsters with proof, not a feeling.</b></p></div>
+      <div class="pain"><div class="ico">🛰</div><h3>"Sixteen yards out there, and you're not on the route."</h3><p>Every crew is on the live map and the geofence stamps every arrival. Watch from home, the shop, or another city. <b>You see every yard start without driving to it.</b></p></div>
+      <div class="pain"><div class="ico">⏱</div><h3>"Friday night: whose hours were where?"</h3><p>Clock-ins per worker, per yard, totaled into timesheets automatically. <b>Run payroll from real numbers, not memory.</b></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="feats band-white on-light">
+  <div class="wrap inner">
+    <span class="eyebrow cool">Built for the trailer, not the office</span>
+    <h2>The three features landscaping crews touch every day.</h2>
+    <div class="featgrid">
+      <a class="acard" href="../index.html#appgrid">
+        <span class="clip" data-src="../assets/clip-gps.mp4" data-mode="loop"><img src="../assets/clip-gps.webp" alt="GPS pin with geofence ring" loading="lazy" width="1112" height="834"></span>
+        <h3>GPS crew tracking</h3>
+        <p>Every crew on the live map, with a geofence that stamps each yard's arrival on its own.</p>
+        <p class="ben">8:04 in DDO, 9:12 in Beaconsfield — stamped without a single call.</p>
+      </a>
+      <a class="acard" href="../index.html#appgrid">
+        <img src="../assets/feat-time.webp" alt="Stopwatch with orange progress arc" loading="lazy">
+        <h3>Time clock</h3>
+        <p>Clock in and out per worker, per yard, from the phone already in their pocket.</p>
+        <p class="ben">DDO 0:35, Pointe-Claire 1:04 — now you know which lawn eats the route.</p>
+      </a>
+      <a class="acard" href="../index.html#appgrid">
+        <span class="clip" data-src="../assets/clip-cost.mp4" data-mode="loop"><img src="../assets/clip-cost.webp" alt="Receipt stack with glowing total" loading="lazy" width="1112" height="834"></span>
+        <h3>Job costing</h3>
+        <p>Each yard's price minus the crew time it burned, tallied while the crew drives to the next one.</p>
+        <p class="ben">Kirkland kept $54. Pointe-Claire lost $2. Per lawn, per day.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="founder band-night citytex">
+  <p><strong>Built by a service company owner</strong> who ran real crews for years and couldn't find software that told him what a job actually cost. The trade was moving; the problem is yours too — crews out of sight, hours on paper, profit unknown. Built from the truck cab out.</p>
+</section>
+
+<section class="faq band-ivory on-light">
+  <svg class="motif" style="left:-190px;top:40px;width:480px;height:480px" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="100" stroke-dasharray="3 9"/><circle cx="200" cy="200" r="46"/><path d="M200 6v76M200 318v76M6 200h76M318 200h76" stroke-linecap="round"/><circle cx="200" cy="200" r="7" fill="currentColor" stroke="none"/></svg>
+  <div class="wrap inner">
+    <span class="eyebrow cool">Questions landscaping companies ask</span>
+    <h2>Before you download it.</h2>
+    <div class="qa">
+      <details><summary>Does CrewFinding work for small landscaping companies?</summary><p>That is exactly who it is built for: landscaping companies running two to five crews. It is priced by truck, from $40 a month, with everyone included.</p></details>
+      <details><summary>Can it tell me which lawns make money?</summary><p>Yes. Every yard gets its own clock, and the app shows each lawn's price minus the crew time it burned. A $45 yard that takes 1:04 of a three-man crew shows its loss the day it happens — not at the end of the season.</p></details>
+      <details><summary>Does it track my crews between yards?</summary><p>Every crew appears on a live map, and a geofence stamps the arrival at each property automatically. You can watch the whole route from home, the shop, or another city.</p></details>
+      <details><summary>Can my crew prove a yard was done?</summary><p>Yes. The crew snaps a photo of the finished yard and it files to that property's record with the time and the GPS stamp. When a client says you never came, you answer with a photo taken at 8:33 in their backyard.</p></details>
+      <details><summary>Can clients sign seasonal contracts on a phone?</summary><p>Yes. The client signs the season contract on your crew's phone at the door, and it files itself to the client's record instantly. It cannot be lost.</p></details>
+      <details><summary>What does it cost?</summary><p>Plans start at $40 a month, priced by truck: $40 for up to 2 trucks, $60 for 3 trucks, $80 for up to 5. More than 5 trucks, contact us. Everything is included. Prices are in Canadian dollars. See the <a class="seolink" href="../pricing/index.html">full pricing</a>.</p></details>
+      <details><summary>Does it handle payroll for my crew?</summary><p>No — and we won't pretend it does. CrewFinding tracks every worker's hours per yard and totals them into a timesheet, so when you run payroll you're working from exact tracked hours instead of paper or memory.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="close citytex band-night">
+  <div class="inner">
+    <div class="cta-card">
+    <h2>Know what every lawn really makes.</h2>
+    <a class="btn on-gold" href="#" data-store style="font-size:17px;padding:16px 38px">Download CrewFinding</a>
+    <p class="ctanote">FREE TO DOWNLOAD · iOS &amp; ANDROID · FROM $40/MO</p>
+    <p class="links"><a class="seolink" href="../moving/index.html">moving company software</a> &nbsp;·&nbsp; <a class="seolink" href="../junk-removal/index.html">junk removal software</a> &nbsp;·&nbsp; <a class="seolink" href="../trucking-logistics/index.html">trucking and logistics software</a> &nbsp;·&nbsp; <a class="seolink" href="../pricing/index.html">CrewFinding pricing</a></p>
+  </div>
+  </div>
+</section>
+
+<footer class="slim">
+  <div class="frow">
+    <span>© 2026 CrewFinding. Built in Montreal.</span>
+    <span>
+      <a href="../index.html">Home</a>
+      <a href="../pricing/index.html">Pricing</a>
+      <a href="../moving/index.html">For moving companies</a>
+      <a href="../what-is-crewfinding/index.html">What is CrewFinding?</a>
+      <a href="../privacy/index.html">Privacy</a>
+      <a href="../terms/index.html">Terms</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var IOS_URL="https://apps.apple.com/app/crewfinding", AND_URL="https://play.google.com/store/apps/details?id=com.crewfinding";
+document.querySelectorAll("[data-store]").forEach(function(el){
+  el.addEventListener("click",function(e){
+    e.preventDefault();
+    var ua=navigator.userAgent;
+    if(/iPhone|iPad|iPod/i.test(ua)) location.href=IOS_URL;
+    else if(/Android/i.test(ua)) location.href=AND_URL;
+    else document.querySelector(".badges").scrollIntoView({behavior:"smooth",block:"center"});
+  });
+});
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target);}});},{threshold:.3});
+document.querySelectorAll(".step").forEach(function(s){io.observe(s);});
+})();
+</script>
+<script src="../assets/cf-clips.js" defer></script>
+<script src="../assets/cf-dispatch.js" defer></script>
+</body>
+</html>
